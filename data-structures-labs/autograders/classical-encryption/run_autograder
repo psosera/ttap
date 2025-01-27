@@ -1,0 +1,171 @@
+#!/usr/bin/env python3
+
+import json
+from os import chdir
+from os.path import exists, join
+from shutil import copytree
+from subprocess import PIPE, run, STDOUT
+from sys import exit
+
+def required_file_test(path, root='submission'):
+    file_exists = exists(join(root, path))
+    return {
+        'name': f'Required file {path} present?',
+        'status': 'success' if file_exists else 'failed'
+    }
+    
+def single_file_compiles_only_test(path, additional_args=[], root='submission'):
+    result  = run(['javac', join(root, path)] + additional_args, stdout=PIPE, stderr=STDOUT)
+    success = result.returncode == 0
+    return {
+        'name': f'{path} compiles?',
+        'status': 'success' if success else 'failed',
+        'output': '' if success else result.stdout.decode('utf-8')
+    }
+
+def single_file_run_test(short_name, args, expected, alt=None, root='submission'):
+    result  = run(['java'] + args, stdout=PIPE, stderr=STDOUT)
+    output  = result.stdout.decode('utf-8').strip()
+    success = output == expected or output == alt
+    return {
+        'name': short_name,
+        'status': 'success' if success else 'failed',
+        'output': '' if success else f'Expected:\n{expected}\n---\nReceived:\n{output}'
+    }
+
+################################################################################
+
+chdir('submission')
+
+required_tests = [
+    required_file_test('Encryption.java', root=''),
+    single_file_compiles_only_test('Encryption.java', root=''),
+    single_file_run_test('encode helloworld', ['Encryption', 'encode', 'helloworld'], '''n = 0: helloworld
+n = 1: ifmmpxpsme
+n = 2: jgnnqyqtnf
+n = 3: khoorzruog
+n = 4: lippsasvph
+n = 5: mjqqtbtwqi
+n = 6: nkrrucuxrj
+n = 7: olssvdvysk
+n = 8: pmttwewztl
+n = 9: qnuuxfxaum
+n = 10: rovvygybvn
+n = 11: spwwzhzcwo
+n = 12: tqxxaiadxp
+n = 13: uryybjbeyq
+n = 14: vszzckcfzr
+n = 15: wtaadldgas
+n = 16: xubbemehbt
+n = 17: yvccfnficu
+n = 18: zwddgogjdv
+n = 19: axeehphkew
+n = 20: byffiqilfx
+n = 21: czggjrjmgy
+n = 22: dahhksknhz
+n = 23: ebiiltloia
+n = 24: fcjjmumpjb
+n = 25: gdkknvnqkc'''),
+    single_file_run_test('decode dahhksknhz', ['Encryption', 'decode', 'dahhksknhz'], '''n = 0: dahhksknhz
+n = 1: czggjrjmgy
+n = 2: byffiqilfx
+n = 3: axeehphkew
+n = 4: zwddgogjdv
+n = 5: yvccfnficu
+n = 6: xubbemehbt
+n = 7: wtaadldgas
+n = 8: vszzckcfzr
+n = 9: uryybjbeyq
+n = 10: tqxxaiadxp
+n = 11: spwwzhzcwo
+n = 12: rovvygybvn
+n = 13: qnuuxfxaum
+n = 14: pmttwewztl
+n = 15: olssvdvysk
+n = 16: nkrrucuxrj
+n = 17: mjqqtbtwqi
+n = 18: lippsasvph
+n = 19: khoorzruog
+n = 20: jgnnqyqtnf
+n = 21: ifmmpxpsme
+n = 22: helloworld
+n = 23: gdkknvnqkc
+n = 24: fcjjmumpjb
+n = 25: ebiiltloia'''),
+    single_file_run_test('encode csisfun', ['Encryption', 'encode', 'csisfun'], '''n = 0: csisfun
+n = 1: dtjtgvo
+n = 2: eukuhwp
+n = 3: fvlvixq
+n = 4: gwmwjyr
+n = 5: hxnxkzs
+n = 6: iyoylat
+n = 7: jzpzmbu
+n = 8: kaqancv
+n = 9: lbrbodw
+n = 10: mcscpex
+n = 11: ndtdqfy
+n = 12: oeuergz
+n = 13: pfvfsha
+n = 14: qgwgtib
+n = 15: rhxhujc
+n = 16: siyivkd
+n = 17: tjzjwle
+n = 18: ukakxmf
+n = 19: vlblyng
+n = 20: wmcmzoh
+n = 21: xndnapi
+n = 22: yoeobqj
+n = 23: zpfpcrk
+n = 24: aqgqdsl
+n = 25: brhretm'''),
+    single_file_run_test('decode ndtdqfy', ['Encryption', 'decode', 'ndtdqfy'], '''n = 0: ndtdqfy
+n = 1: mcscpex
+n = 2: lbrbodw
+n = 3: kaqancv
+n = 4: jzpzmbu
+n = 5: iyoylat
+n = 6: hxnxkzs
+n = 7: gwmwjyr
+n = 8: fvlvixq
+n = 9: eukuhwp
+n = 10: dtjtgvo
+n = 11: csisfun
+n = 12: brhretm
+n = 13: aqgqdsl
+n = 14: zpfpcrk
+n = 15: yoeobqj
+n = 16: xndnapi
+n = 17: wmcmzoh
+n = 18: vlblyng
+n = 19: ukakxmf
+n = 20: tjzjwle
+n = 21: siyivkd
+n = 22: rhxhujc
+n = 23: qgwgtib
+n = 24: pfvfsha
+n = 25: oeuergz'''),
+    single_file_run_test('No args', ['Encryption'],
+                         'Usage: java CaeserCipher <encode|decode> <text>',
+                         'Usage: java Encryption <encode|decode> <text>'),
+    single_file_run_test('Too many args', ['Encryption', 'encode', 'foo', 'bar'],
+                         'Usage: java CaeserCipher <encode|decode> <text>',
+                         'Usage: java Encryption <encode|decode> <text>'),
+    single_file_run_test('Invalid command', ['Encryption', 'foo', 'bar'],
+                         'Usage: java CaeserCipher <encode|decode> <text>',
+                         'Usage: java Encryption <encode|decode> <text>'),
+    single_file_run_test('Non-lowercase text', ['Encryption', 'encode', 'HelloWorld!'],
+                         'Usage: java CaeserCipher <encode|decode> <text>',
+                         'Usage: java Encryption <encode|decode> <text>'),
+]
+
+all_required_tests_pass = all([t['status'] == 'success' for t in required_tests])
+
+chdir('..')
+
+output = {
+    'score': 1.0 if all_required_tests_pass else 0.0,
+    'tests': required_tests
+}
+
+with open(join('results', 'results.json'), 'w') as f:
+    f.write(json.dumps(output))

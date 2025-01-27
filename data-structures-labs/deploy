@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+BOOK_PATH=ttap/data-structures-labs
+
+mdbook build
+rsync -crtvz --progress book/* reclaim:www/${BOOK_PATH}

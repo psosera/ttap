@@ -1,0 +1,103 @@
+#!/usr/bin/env python3
+
+import json
+from os import chdir
+from os.path import exists, join
+from shutil import copytree
+from subprocess import PIPE, run, STDOUT
+from sys import exit
+
+def output_build_error(name, detail):
+    print(json.dumps({
+        'tests': [
+            {
+                'name': name,
+                'status': 'failed',
+                'output': detail
+            }
+        ]
+    }))
+
+def output_build_success(name, detail):
+    print(json.dumps({
+        'tests': [
+            {
+                'name': 'Required files',
+                'status': 'success'
+            }
+        ]
+    }))
+
+def file_to_list(path):
+    if not exists(path):
+        output_build_error('Internal error', f'Config file not found: {path}')
+        exit(1)
+    with open(path, 'r') as f:
+        return f.read().splitlines()
+
+def check_submission_files(files):
+    missing = []
+    for path in files:
+        if not exists(path):
+            missing.append(path)
+    if len(missing) > 0:
+        output_build_error('Required files', f'Missing files: {", ".join(missing)}')
+        exit(1)
+
+# Assumes that the submission is in Maven standard directory layout:
+# https://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html
+def copy_sources():
+    copytree(join('submission', 'src', 'main', 'java'),
+             join('source', 'src', 'main', 'java'),
+             dirs_exist_ok=True)
+
+def compile_and_run_tests():
+    chdir('source')
+    result = run(['mvn', '-q', 'compile'], stdout=PIPE, stderr=STDOUT)
+    if result.returncode != 0:
+        output_build_error('Compilation', result.stdout.decode('utf-8'))
+        exit(1)
+    # N.B., the test harness is responsible for printing JSON to stdout
+    result = run(['mvn', '-q', 'test'], stdout=PIPE, stderr=STDOUT)
+    print(result.stdout.decode('utf-8'))
+
+def required_file_test(path, root='submission'):
+    file_exists = exists(join(root, path))
+    return {
+        'name': f'Required file {path} present?',
+        'status': 'success' if file_exists else 'failed'
+    }
+    
+def single_file_compiles_only_test(path, additional_args=[], root='submission'):
+    result  = run(['javac', join(root, path)] + additional_args, stdout=PIPE, stderr=STDOUT)
+    success = result.returncode == 0
+    return {
+        'name': f'{path} compiles?',
+        'status': 'success' if success else 'failed',
+        'output': '' if success else result.stdout.decode('utf-8')
+    }
+
+################################################################################
+
+chdir('submission')
+
+required_tests = [
+    required_file_test('HelloWorld.java', root=''),
+    required_file_test('FizzBuzz.java', root=''),
+    required_file_test('ArrayExploration.java', root=''),
+    single_file_compiles_only_test('HelloWorld.java', root=''),
+    single_file_compiles_only_test('FizzBuzz.java', root=''),
+    single_file_compiles_only_test('ArrayExploration.java', root='')
+]
+
+all_required_tests_pass = all([t['status'] == 'success' for t in required_tests])
+
+chdir('..')
+
+output = {
+    'score': 1.0 if all_required_tests_pass else 0.0,
+    'tests': required_tests
+}
+
+with open(join('results', 'results.json'), 'w') as f:
+    f.write(json.dumps(output))
