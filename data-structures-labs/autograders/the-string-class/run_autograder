@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import json
-from os import chdir, getcwd
+from os import chdir, getcwd, makedirs, rename
 from os.path import exists, join
 from shutil import copytree
 from subprocess import PIPE, run, STDOUT
@@ -18,6 +18,13 @@ def required_file_test(path, root='submission'):
 def project_compiles_only_test(name, project_path, additional_args=[]):
     pwd = getcwd()
     chdir(project_path)
+
+    # N.B., hack to fix project turn-ins! It appears that uploading a folder
+    # flattens the entire directory structure... but we needed that! The
+    # hacky fix for now is to recreate it for the one java file in question...
+    makedirs(join('src', 'main', 'java', 'edu', 'grinnell', 'csc207', 'stringexercises'))
+    rename('StringExercises.java', join('src', 'main', 'java', 'edu', 'grinnell', 'csc207', 'stringexercises', 'StringExercises.java'))
+
     result  = run(['mvn', 'compile', '-q'] + additional_args, stdout=PIPE, stderr=STDOUT)
     success = result.returncode == 0
     chdir(pwd)
@@ -30,10 +37,10 @@ def project_compiles_only_test(name, project_path, additional_args=[]):
 ################################################################################
 
 required_tests = [
-    required_file_test('StringExercises'),
-    required_file_test('StringExercises.java', root=join('submission', 'StringExercises', 'src', 'main', 'java', 'edu', 'grinnell', 'csc207', 'stringexercises')),
-    required_file_test('README.md', root=join('submission', 'StringExercises')),
-    project_compiles_only_test('StringExercises', join('submission', 'StringExercises'))
+    required_file_test('StringExercises.java', root='submission'),
+    required_file_test('pom.xml', root='submission'),
+    required_file_test('README.md', root='submission'),
+    project_compiles_only_test('StringExercises', 'submission')
 ]
 
 all_required_tests_pass = all([t['status'] == 'success' for t in required_tests])
