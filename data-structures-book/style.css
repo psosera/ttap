@@ -1,0 +1,152 @@
+:root {
+  /* Font stacks from https://systemfontstack.com/ */
+  --sans-serif-fonts: Seravek, 'Gill Sans Nova', Ubuntu, Calibri, 'DejaVu Sans', source-sans-pro, sans-serif;
+  --serif-fonts: Charter, 'Bitstream Charter', 'Sitka Text', Cambria, serif;
+  --mono-fonts: Menlo, Consolas, Monaco, Liberation Mono, Lucida Console, monospace;
+
+
+  font-family: var(--serif-fonts);
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 1.6;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  font-size: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+main {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 1rem;
+
+  background-color: #eeeeee;
+  color: #333333;
+}
+
+a {
+  color: #0066cc;
+  text-decoration: underline;
+}
+
+a:hover {
+  color: #004999;
+}
+
+p {
+  margin-bottom: 1em;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--sans-serif-fonts);
+  font-weight: bold;
+}
+
+h1 {
+  font-size: 2rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+h2 {
+  font-size: 1.75rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+h3 {
+  font-size: 1.5rem;
+  margin-top: 1.25rem;
+  margin-bottom: 0.75rem;
+}
+
+/* TODO: cover h4, h5, h6 */
+
+ul, ol {
+  margin: 1em 0 1em 0;
+  line-height: 1.6;
+}
+
+li {
+  margin: 0.5em 0;
+}
+
+code, pre {
+  font-family: var(--mono-fonts);
+}
+
+pre {
+  border: 1px dotted #ccc;
+}
+
+.nav-wide-wrapper { display: none; }
+#theme-toggle { display: none; }
+
+.menu-title {
+  font-family: var(--sans-serif-fonts);
+  font-weight: normal;
+  font-size: 1.5rem;
+  font-style: italic;
+}
+
+.exercise {
+  background-color: #f0e0d0;
+  padding: 1rem;
+}
+
+.exercise .solution {
+  border: 1px dotted #000000;
+  padding: 1rem;
+  display: none;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+figure {
+  margin: 1rem 0;
+  text-align: center;
+}
+
+figcaption {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+@media (max-width: 768px) {
+  body {
+    font-size: 16px;
+  }
+
+  .content {
+    margin-left: 0;
+    max-width: 100%;
+    padding: 1rem;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}
+
