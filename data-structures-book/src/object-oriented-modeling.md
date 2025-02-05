@@ -275,10 +275,9 @@ For example, the `Counter` class exposes:
 - A way to construct an instance via a no-argument constructor,
 - A `value` field that is the current value of the counter, and
 - An `increment()` method to increment the counter.
-\end{itemize}
 
 These three things constitute a user's _interface_ to a counter.
-One suspicious design decision here is that we have exposed the \texttt{value} field to the user by marking it \texttt{public}
+One suspicious design decision here is that we have exposed the `value` field to the user by marking it `public`.
 This may be undesirable because a user can set the value of a counter to any value that they want, e.g.,
 
 ~~~java

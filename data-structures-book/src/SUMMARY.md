@@ -10,7 +10,8 @@
 
 # Program Analysis
 
-- [Correctness]()
+- [Correctness](./correctness.md)
+- [Scientific Debugging](./scientific-debugging.md)
 - [Complexity]()
 - [Algorithmic Design]()
 

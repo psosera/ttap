@@ -163,7 +163,7 @@ all_required_tests_pass = all([t['status'] == 'success' for t in required_tests]
 chdir('..')
 
 output = {
-    'score': 1.0 if all_required_tests_pass else 0.0,
+    'score': 0.0,
     'tests': required_tests
 }
 
