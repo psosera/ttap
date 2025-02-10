@@ -32,7 +32,7 @@ In this reading, we'll go through the first three steps and in lab, we'll introd
 
 ### Observation and Data Collection
 
-~~~admomish question title="Discovering Errors"
+~~~admonish question title="Discovering Errors"
 Consider the following method which performs the _selection sort_ algorithm on an array of numbers:
 
 ```java

@@ -12,11 +12,13 @@
 
 - [Correctness](./correctness.md)
 - [Scientific Debugging](./scientific-debugging.md)
-- [Complexity]()
-- [Algorithmic Design]()
+- [Counting Operations](./counting-operations.md)
+- [Asymptotic Analysis](./asymptotic-analysis.md)
+- [Recursion and Recurrences](./recursion-and-recurrences.md)
 
 # Sequential Structures
 
+- [Algorithmic Design]()
 - [Sequential Structures]()
 - [Polymorphism]()
 - [Sorting and Searching]()
