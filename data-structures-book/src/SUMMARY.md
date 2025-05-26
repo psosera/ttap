@@ -19,23 +19,25 @@
 # Sequential Structures
 
 - [Algorithmic Design]()
-- [Sequential Structures]()
-- [Polymorphism]()
+- [Sequential Structures](./sequential-structures.md)
+- [Polymorphism](./polymorphism.md)
+- [Amortized Analysis](./amortized-analysis.md)
 - [Sorting and Searching]()
-- [Higher-order Sequential Structures]()
+- [Higher-order Sequential Operations](./higher-order-sequential-operations.md)
 
 # Hierarchical Structures
 
-- [Hierarchical Structures]()
-- [Priority Queues]()
+- [Hierarchical Structures](./hierarchical-structures.md)
+- [Balancing](./balancing.md)
+- [Priority Queues](./priority-queues.md)
 
 # Mapping Structures
 
-- [Mapping Structures]()
-- [Hashing]()
+- [Mapping Structures](./mapping-structures.md)
+- [Hashing](./hashing.md)
 
 # Graphical Structures
 
 # Beyond Small-scale Programming
 
-- [Inheritance]()
+- [Inheritance](./inheritance.md)

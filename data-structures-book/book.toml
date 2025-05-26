@@ -8,6 +8,8 @@ title = "Tools for Thinking About Programs: Data Structures"
 [output.html]
 additional-css = ["style.css", "./mdbook-admonish.css"]
 no-section-label = true
+default-theme = "light"
+additional-js = ["mermaid.min.js", "mermaid-init.js"]
 
 [preprocessor]
 
@@ -18,3 +20,6 @@ assets_version = "3.0.2" # do not edit: managed by `mdbook-admonish install`
 
 [preprocessor.katex]
 after = ["links"]
+
+[preprocessor.mermaid]
+command = "mdbook-mermaid"

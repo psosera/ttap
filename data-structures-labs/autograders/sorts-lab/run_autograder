@@ -1,0 +1,115 @@
+#!/usr/bin/env python3
+
+import json
+from os import chdir, getcwd, makedirs, rename
+from os.path import basename, exists, join
+from shutil import copytree
+from subprocess import PIPE, run, STDOUT
+from sys import exit
+
+def required_file_test(path, root='submission'):
+    filename = basename(path)
+    file_exists = exists(join(root, path))
+    return {
+        'name': f'Required file {filename} present?',
+        'status': 'success' if file_exists else 'failed',
+        'output': '' if file_exists else f'{path} not found in submission'
+    }
+
+def compiles_test():
+    pwd = getcwd()
+    chdir('submission')
+    result  = run(['mvn', 'clean', 'compile', '-q'], stdout=PIPE, stderr=STDOUT)
+    success = result.returncode == 0
+    output  = result.stdout.decode('utf-8')
+    chdir(pwd)
+    return [{
+        'name': 'Project compiles?',
+        'status': 'success' if success else 'failed',
+        'output': output
+    }]
+
+def existing_tests_pass_test():
+    pwd = getcwd()
+    chdir('submission')
+    result  = run(['mvn', 'clean', 'compile', 'test', '-q'], stdout=PIPE, stderr=STDOUT)
+    success = result.returncode == 0
+    output  = result.stdout.decode('utf-8')
+    chdir(pwd)
+    return [{
+        'name': "Project's tests pass?",
+        'status': 'success' if success else 'failed',
+        'output': output
+    }]
+
+def checkstyle_test():
+    pwd = getcwd()
+    run(['cp', 'source/checkstyle.xml', 'submission'])
+    run(['cp', 'source/suppressions.xml', 'submission'])
+    chdir('submission')
+    # N.B., run this twice so dependencies are first installed without appearing in output
+    run(['mvn', 'checkstyle:check'])
+    result  = run(['mvn', 'checkstyle:check'], stdout=PIPE, stderr=STDOUT)
+    success = result.returncode == 0
+    output  = result.stdout.decode('utf-8')
+    chdir(pwd)
+    return [{
+        'name': "Project's style is ok?",
+        'status': 'success' if success else 'failed',
+        'output': output
+    }]
+
+def test_suite_test(project_path='.'):
+    TEST_DIR = 'tester'
+    run(['cp', '-r', 'submission/{}/.'.format(project_path), TEST_DIR])
+    run(['cp', '-r', 'source/tester/.', TEST_DIR])
+    pwd = getcwd()
+    chdir(TEST_DIR)
+    result  = run(['mvn', 'clean', 'compile', 'exec:java', '-q'], stdout=PIPE, stderr=STDOUT)
+    chdir(pwd)
+    success = result.returncode == 0
+    output  = result.stdout.decode('utf-8')
+    if success:
+        return json.loads(output, strict=False)
+    else:
+        return [{
+            'name': 'Project compiles (with test suite)?',
+            'status': 'failed',
+            'output': output
+        }]
+
+################################################################################
+
+PROJECT_PACKAGE_NAME = 'sortslab'
+IS_LAB = True
+
+def all_tests_succeed(results):
+    return all(t['status'] == 'success' for t in results)
+
+def package_path(file, is_test=False):
+    return join('src', 'test' if is_test else 'main', 'java', 'edu', 'grinnell', 'csc207', PROJECT_PACKAGE_NAME, file)
+
+required_files_tests = [
+    required_file_test('pom.xml'),
+    required_file_test('README.md'),
+    required_file_test(package_path('Sorts.java')),
+]
+
+autograder_tests = []
+
+if all_tests_succeed(required_files_tests):
+    autograder_tests = [
+        *compiles_test(),
+        # *existing_tests_pass_test(),
+        # *checkstyle_test(),
+        # *test_suite_test()
+    ]
+
+output = {
+    'score': 1.0 if IS_LAB and all_tests_succeed(autograder_tests) else 0.0,
+    'tests': required_files_tests + autograder_tests
+}
+
+makedirs('results', exist_ok=True)
+with open(join('results', 'results.json'), 'w') as f:
+    f.write(json.dumps(output))

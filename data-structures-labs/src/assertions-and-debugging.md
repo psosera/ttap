@@ -23,7 +23,7 @@ public static int foo1(int x1, int x2) {
     // Point B
     int y1 = x1 % 10;
     int y2 = x2 % 10;
-    z = 0;
+    int z = 0;
     // Point C
     if (y1 < y2) {
         z = y1 - y2;
@@ -37,18 +37,18 @@ public static int foo1(int x1, int x2) {
 
 Now, consider whether each of the propositions holds at the given point in the method all the time (✓), some of the time (?), or none of the time (✗):
 
-+   Point A:
-    - `x1 == 0`
-    – `x2 < 0`
-+   Point B:
-    – `x1 == 0`
-    – `x2 < 0`
-+   Point C:
-    - `y1 < 5`
-    – `y2 > 0`
-+   Point D:
-    – `z > y1`
-    – `z < 0`
+*   Point A:
+    + `x1 == 0`
+    + `x2 < 0`
+*   Point B:
+    + `x1 == 0`
+    + `x2 < 0`
+*   Point C:
+    + `y1 < 5`
+    + `y2 > 0`
+*   Point D:
+    + `z > y1`
+    + `z < 0`
 
 ### Problem 1b
 

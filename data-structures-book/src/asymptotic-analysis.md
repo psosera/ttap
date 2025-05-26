@@ -272,4 +272,3 @@ public static int max(int[] arr) {
 
 Give a big-O bound, the tightest possible bound you can, for each of those models.
 ~~~
-
