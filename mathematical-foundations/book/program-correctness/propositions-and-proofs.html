@@ -1,0 +1,395 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Proposition and Proofs - Tools for Thinking About Programs: Mathematical Foundations</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="../highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="../tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href=".././book.css">
+        <link rel="stylesheet" href=".././mdbook-admonish.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Tools for Thinking About Programs: Mathematical Foundations</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<h1 id="propositions-and-proofs"><a class="header" href="#propositions-and-proofs">Propositions and Proofs</a></h1>
+<p>Our formal model of computation allows us to reason about the behavior of programs.
+But to what ends can we apply this reasoning?
+Besides merely checking our work, we can also use our formal model to <em>prove propositions</em> about our programs.</p>
+<div id="admonition-proposition" class="admonition admonish-info" role="note" aria-labelledby="admonition-proposition-title">
+<div class="admonition-title">
+<div id="admonition-proposition-title">
+<p>Proposition</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-proposition"></a>
+</div>
+<div>
+<p>A <em>proposition</em> is an assertion or statement, potentially provable.</p>
+</div>
+</div>
+<p>Another word for a proposition is a <em>claim</em>.
+Here are some example propositions over programs that we could consider:</p>
+<ul>
+<li><code>len("hello world!")</code> is equivalent to 12.</li>
+<li>There exists a list <code>l</code> for which <code>len(l)</code> is <code>0</code>.</li>
+<li><code>insertion_sort(l)</code> performs more comparison operations than <code>mergesort(l)</code> for any list <code>l</code>.</li>
+<li>For any number <code>n</code>, <code>2 * n</code> is greater than <code>n</code>.</li>
+</ul>
+<p>The first proposition is a <em>fully concrete</em> proposition of the sort we have previously considered.
+The second is an <em>abstract</em> proposition because it involves a variable, here <code>l</code>.</p>
+<p>Ultimately, the first two propositions involve equivalences between expressions.
+But propositions do not need to be restricted to equivalences.
+The third proposition talks about the number of operations that one expression performs relative to another.</p>
+<p>Furthermore, propositions don't even need to be provable!
+For example, the final proposition is not provable.
+A <em>counterexample</em> to this proposition arises when we consider <code>n = -1</code>.
+<code>2 * -1</code> evaluates to <code>-2</code>, and <code>-2</code> is not greater than <code>-1</code>!</p>
+<div id="admonition-info" class="admonition admonish-info" role="note" aria-labelledby="admonition-info-title">
+<div class="admonition-title">
+<div id="admonition-info-title">
+<p>Info</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-info"></a>
+</div>
+<div>
+<p><strong>"True" versus "Provable"</strong>: in our discussion of logic and its applications to program correctness, we will need to discuss both <em>boolean expressions</em> as well as propositions.
+There exist commonalities between both---they involve truth and falseness.
+However, booleans exist <em>inside</em> our model, <em>i.e.</em>, at the level of programs.
+Propositions exist <em>outside</em> of the model as they ultimately are statements <em>about</em> the model.</p>
+<p>To distinguish between the two, we'll use the terms <code>true</code> and <code>false</code> when discussing booleans and "provable" and "refutable" when discussing propositions.
+We should think of boolean expressions as <em>evaluating</em> to <code>true</code> or <code>false</code>.
+In contrast, we will employ <em>logical reasoning</em> to show that a proposition is provable or refutable.</p>
+</div>
+</div>
+<h2 id="equivalences-between-expressions"><a class="header" href="#equivalences-between-expressions">Equivalences Between Expressions</a></h2>
+<p>Of the many sorts of propositions possible, we will work exclusively with <em>equivalences</em> in our discussion of program correctness.</p>
+<div id="admonition-definition-program-equivalence" class="admonition admonish-info" role="note" aria-labelledby="admonition-definition-program-equivalence-title">
+<div class="admonition-title">
+<div id="admonition-definition-program-equivalence-title">
+<p>Definition: Program Equivalence</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-definition-program-equivalence"></a>
+</div>
+<div>
+<p>Two expressions <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> and <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> are equivalent, written <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6138em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≡</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> (LaTeX: <code>\equiv</code>, Unicode: ≡) if <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8387em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel"><span class="mrel">⟶</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6887em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∗</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span></span></span></span> and <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8387em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel"><span class="mrel">⟶</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6887em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∗</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span></span></span></span>.</p>
+</div>
+</div>
+<p>Recall that <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.522em;vertical-align:-0.011em;"></span><span class="mord mathnormal">e</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">⟶</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7519em;"></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7519em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span></span></span></span> ("steps to", LaTeX: <code>\longrightarrow</code>) means that the Python expression <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">e</span></span></span></span> takes a single step of evaluation to <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7519em;"></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7519em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span></span></span></span> in our mental model of computation.
+The notation <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6997em;vertical-align:-0.011em;"></span><span class="mord mathnormal">e</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel"><span class="mrel">⟶</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6887em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∗</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7519em;"></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7519em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span></span></span></span> ("evaluates to", LaTeX: <code>\longrightarrow^*</code>) means that <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">e</span></span></span></span> takes <em>zero or more steps</em> to arrive at <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7519em;"></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7519em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span></span></span></span>.
+With this in mind, the formal definition of equivalence amounts to saying the following:</p>
+<blockquote>
+<p>Two expressions are equivalent if they evaluate to <em>identical</em> values.</p>
+</blockquote>
+<p>Thus, we can prove a claim of program equivalence by using our mental model to give a step-by-step derivation (an <em>execution trace</em>) of an expression to a final value.
+If both sides of the equivalence evaluate to the same value, then we know they are equivalent by our definition!
+The execution trace itself is a <em>proof</em> that the equivalence holds.</p>
+<p>For example, consider the following recursive definition of <code>factorial</code>:</p>
+<pre><code class="language-python">def factorial(n):
+    if n == 0:
+        return 1
+    else:
+        n * factorial(n-1)
+</code></pre>
+<p>and subsequent claim about its behavior:</p>
+<div id="admonition-claim" class="admonition admonish-question" role="note" aria-labelledby="admonition-claim-title">
+<div class="admonition-title">
+<div id="admonition-claim-title">
+<p>Claim</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-claim"></a>
+</div>
+<div>
+<p><strong>Claim</strong>: <code>factorial(3)</code> <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4637em;"></span><span class="mrel">≡</span></span></span></span> <code>6</code>.</p>
+</div>
+</div>
+<p>We can prove this claim by evaluating the left-hand side of the equivalence and observing that it is identical to the right-hand side:</p>
+<div id="admonition-proof" class="admonition admonish-success" role="note" aria-labelledby="admonition-proof-title">
+<div class="admonition-title">
+<div id="admonition-proof-title">
+<p>Proof</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-proof"></a>
+</div>
+<div>
+<p>The left-hand side expression evaluates as follows:</p>
+<pre><code class="language-python">    factorial(3)
+--&gt; {if 3 == 0: return 1 else: return 3 * factorial(3-1)}
+--&gt; {if False: return 1 else: return 3 * factorial(3-1)}
+--&gt; {return 3 * factorial(3-1)}
+--&gt; {return 3 * factorial(2)}
+--&gt; {return 3 * { if 2 == 0: return 1 else: return 2 * factorial(2-1)}}
+--&gt; {return 3 * { if False: return 1 else: return 2 * factorial(2-1)}}
+--&gt; {return 3 * { return 2 * factorial(2-1)}}
+--&gt; {return 3 * { return 2 * factorial(1)}}
+--&gt; {return 3 * { return 2 * {if 1 == 0: return 1 else: return 1 * factorial(1-1)}}}
+--&gt; {return 3 * { return 2 * {if False: return 1 else: return 1 * factorial(1-1)}}}
+--&gt; {return 3 * { return 2 * {return 1 * factorial(1-1)}}}
+--&gt; {return 3 * { return 2 * {return 1 * factorial(0)}}}
+--&gt; {return 3 * { return 2 * {return 1 * {if 0 == 0: return 1 else: return 0 * factorial(0-1)}}}}
+--&gt; {return 3 * { return 2 * {return 1 * {if True: return 1 else: return 0 * factorial(0-1)}}}}
+--&gt; {return 3 * { return 2 * {return 1 * {return 1}}}}
+--&gt; {return 3 * { return 2 * {return 1 * 1}}}
+--&gt; {return 3 * { return 2 * {return 1}}}
+--&gt; {return 3 * { return 2 * 1}}
+--&gt; {return 3 * { return 2}}
+--&gt; {return 3 * 2}
+--&gt; {return 6}
+--&gt; 6
+</code></pre>
+</div>
+</div>
+<p>This precise step-by-step analysis of the behavior of the expression rigorously proves our claim!</p>
+<h2 id="formatting-proofs"><a class="header" href="#formatting-proofs">Formatting Proofs</a></h2>
+<p>We will use this standard format for writing formal proofs for the remainder of the course.
+In summary, we write:</p>
+<div id="admonition-proof-template" class="admonition admonish-info" role="note" aria-labelledby="admonition-proof-template-title">
+<div class="admonition-title">
+<div id="admonition-proof-template-title">
+<p>Proof Template</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-proof-template"></a>
+</div>
+<div>
+<p><strong>Claim</strong>: <em>(The claim to be proven)</em></p>
+<p><em>Proof</em>.
+<em>(The proof of the claim)</em></p>
+</div>
+</div>
+<div id="admonition-exercise-concrete-evaluation-" class="admonition admonish-note" role="note" aria-labelledby="admonition-exercise-concrete-evaluation--title">
+<div class="admonition-title">
+<div id="admonition-exercise-concrete-evaluation--title">
+<p>Exercise (Concrete Evaluation, ‡)</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-exercise-concrete-evaluation-"></a>
+</div>
+<div>
+<p>Prove the following claim over concrete expressions:</p>
+<p><strong>Claim</strong>: <code>1 + 2 + 3</code> <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4637em;"></span><span class="mrel">≡</span></span></span></span> <code>(3 * (3 + 1)) / 2</code>.</p>
+<p>Write our your proof in the format described above.</p>
+</div>
+</div>
+<footer>Tools for Thinking About Programs: Mathematical Foundations © 2025 by <a href='https://iampmo.com'>Peter-Michael Osera</a> is licensed under <a href='https://creativecommons.org/licenses/by-nc/4.0/'>CC BY-NC 4.0</a>.</footer>
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../program-correctness/concrete-evaluation.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../program-correctness/symbolic-execution.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../program-correctness/concrete-evaluation.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../program-correctness/symbolic-execution.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        <script>
+            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
+            const socket = new WebSocket(wsAddress);
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

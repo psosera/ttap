@@ -1,0 +1,24 @@
+[book]
+authors = ["Peter-Michael Osera"]
+language = "en"
+multilingual = false
+src = "src"
+title = "Tools for Thinking About Programs: Mathematical Foundations"
+
+[output.html]
+additional-css = ["./book.css", "./mdbook-admonish.css"]
+no-section-label = true
+
+[preprocessor]
+
+[preprocessor.admonish]
+command = "mdbook-admonish"
+on_failure = "bail"
+assets_version = "3.0.2" # do not edit: managed by `mdbook-admonish install`
+
+[preprocessor.katex]
+after = ["links"]
+
+[preprocessor.header-footer]
+headers = [{ padding = "\n" }]
+footers = [{ padding = "\n\n<footer>Tools for Thinking About Programs: Mathematical Foundations © 2025 by <a href='https://iampmo.com'>Peter-Michael Osera</a> is licensed under <a href='https://creativecommons.org/licenses/by-nc/4.0/'>CC BY-NC 4.0</a>.</footer>" }]

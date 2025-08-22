@@ -1,0 +1,789 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Preconditions and Proof States - Tools for Thinking About Programs: Mathematical Foundations</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="../highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="../tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href=".././book.css">
+        <link rel="stylesheet" href=".././mdbook-admonish.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Tools for Thinking About Programs: Mathematical Foundations</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<h1 id="preconditions-and-proof-states"><a class="header" href="#preconditions-and-proof-states">Preconditions and Proof States</a></h1>
+<p>With quantified variables, we can write rich equality propositions over functions.
+However, there is an essential detail in our claims that we have glossed over until now.
+Recall our <code>list_append</code> claim from the previous readings:</p>
+<div id="admonition-claim" class="admonition admonish-question" role="note" aria-labelledby="admonition-claim-title">
+<div class="admonition-title">
+<div id="admonition-claim-title">
+<p>Claim</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-claim"></a>
+</div>
+<div>
+<p>For any lists <code>l1</code> and <code>l2</code>, <code>len(l1) + len(l2)</code> ≡ <code>len(list_append(l1, l2))</code>.</p>
+</div>
+</div>
+<p>We snuck under the radar that we <em>assumed</em> that <code>l1</code> and <code>l2</code> were lists!
+This fact is essential because Python is happy to let us call our functions with <em>any</em> values that we want.
+The only caveat is that we may not like the results!</p>
+<pre><code class="language-python">&gt;&gt;&gt; list_append("banana", 7)
+Traceback (most recent call last):
+  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+  File "&lt;stdin&gt;", line 5, in list_append
+  File "&lt;stdin&gt;", line 5, in list_append
+  File "&lt;stdin&gt;", line 5, in list_append
+  [Previous line repeated 3 more times]
+TypeError: Value after * must be an iterable, not int
+</code></pre>
+<p>Sometimes we might get lucky and get a runtime error indicating that our assumption was violated.
+However, in other cases, we aren't so lucky:</p>
+<pre><code class="language-python">&gt;&gt;&gt; list_append([], "wrong")
+'wrong'
+</code></pre>
+<p>Here we feed <code>list_append</code> a string for its second argument.
+Recall that <code>list_append</code> performs case analysis on its first argument.
+When that first argument is empty, then the second argument is returned immediately.
+So even though the second argument had an incorrect type, the function still "works."</p>
+<p>Nothing stops the user of <code>list_append</code> from passing inappropriate arguments.
+<code>list_append</code> <em>assumes</em> that the arguments passed obey specific properties, in this particular case, that the arguments are lists.
+These assumptions are integral to the correct behavior of the function.
+Consequently, when we analyze a program, we will also need to <em>track</em> and <em>utilize</em> these assumptions in our reasoning.
+This realization will lead us to a <em>formal definition of proof</em> that will guide our remaining study of the foundation of mathematics.</p>
+<h2 id="review-preconditions-and-postconditions"><a class="header" href="#review-preconditions-and-postconditions">Review: Preconditions and Postconditions</a></h2>
+<p>In CSC 151, we captured assumptions about our functions' requirements and behavior as <em>preconditions and postconditions</em>.</p>
+<div id="admonition-definitions" class="admonition admonish-info" role="note" aria-labelledby="admonition-definitions-title">
+<div class="admonition-title">
+<div id="admonition-definitions-title">
+<p>Definitions</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-definitions"></a>
+</div>
+<div>
+<p><strong>Precondition</strong>: a property about the inputs to a function that (a) the caller of the function must fulfill and (b) the function assumes are true.</p>
+<p><strong>Post-condition</strong>: a property about the behavior of the function that (a) the caller can assume holds provided they fulfilled the preconditions of the function and (b) the function ensures during its execution.</p>
+</div>
+</div>
+<p>Preconditions and post-conditions form a <em>contract</em> between the <em>caller</em> of the function and the function itself, also called the <em>callee</em>.
+The caller agrees to fulfill the preconditions of the function.
+In return, the callee fulfills its post-conditions under the assumption that the preconditions have been fulfilled.</p>
+<p>Preconditions and post-conditions are an integral aspect of program design.
+They formalize the notion that while a function, in theory, can guard against every possible erroneous input, it is impractical to do so.
+For example, recall that mergesort relies on a helper function <code>merge</code> that takes two lists and combines them into a single sorted list:</p>
+<pre><code class="language-python">def merge(l1, l2):
+    '''merge(l1, l2) merges lists l1 and l2 into a sorted list.'''
+    # ...
+    pass
+</code></pre>
+<p>The post-condition of <code>merge</code> is that the list it returns is sorted, <em>i.e.</em>, using our language of propositions:</p>
+<div id="admonition-post-condition" class="admonition admonish-question" role="note" aria-labelledby="admonition-post-condition-title">
+<div class="admonition-title">
+<div id="admonition-post-condition-title">
+<p>Post-condition</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-post-condition"></a>
+</div>
+<div>
+<p>is_sorted(merge(l1, l2)) ≡ True.</p>
+</div>
+</div>
+<p><code>is_sorted</code> is a custom function that takes a list <code>l</code> as input and returns <code>True</code> if and only if <code>l</code> is sorted.</p>
+<p>However, what preconditions do we place upon the inputs, <code>l1</code> and <code>l2</code>?</p>
+<ul>
+<li><code>l1</code> and <code>l2</code> must both be lists.</li>
+<li>The elements of <code>l1</code> and <code>l2</code> must all be comparable to each other (presumably with the <code>(&lt;)</code> operator).</li>
+<li><code>l1</code> and <code>l2</code> must be sorted.</li>
+</ul>
+<p>If the implementor of <code>merge</code> was paranoid, they might consider implementing explicit checks for these three preconditions.
+However, imagine what these checks might look like in code.
+All the checks require that we either:</p>
+<ol>
+<li>Scan the lists <code>l1</code> and <code>l2</code> multiple times, once for each precondition we wish to check.</li>
+<li>Integrate all three checks into the merging behavior of the function.</li>
+</ol>
+<p>The former option is modular---we can write one helper function per check---but inefficient.
+The latter option is more efficient but highly invasive to the <code>merge</code> function and leads to an unreadable implementation.</p>
+<p>Both options are undesirable.
+This fact is why we usually choose a third option: make the preconditions <em>documented assumptions</em> about the inputs of the function.</p>
+<div id="admonition-checking-preconditions-in-code" class="admonition admonish-note" role="note" aria-labelledby="admonition-checking-preconditions-in-code-title">
+<div class="admonition-title">
+<div id="admonition-checking-preconditions-in-code-title">
+<p>Checking Preconditions in Code</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-checking-preconditions-in-code"></a>
+</div>
+<div>
+<p>Note that how we account for preconditions in our programs is ultimately an <em>engineering decision</em>.
+You have to consider the context you are in---development ecosystem, company culture--and perform a cost-benefit analysis to determine what the "correct" approach is for your code.</p>
+<p>In CSC 151, we introduced a "kernel-husk" implementation that separated precondition checks from the function's primary behavior.
+While inefficient, this approach is desirable in some situations because Scheme provides little static error checking.
+Other languages provide different mechanisms to capture precondition checks without incurring runtime costs when they are important.
+For example, Java has an <code>assert</code> statement that you can use to check preconditions only when you compile the program in debug mode.
+When you release your software, you can easily switch to release mode, which removes all the <code>assert</code> checks.</p>
+</div>
+</div>
+<h2 id="preconditions-as-assumptions-during-proof"><a class="header" href="#preconditions-as-assumptions-during-proof">Preconditions as Assumptions During Proof</a></h2>
+<p>When we reason about concrete propositions, preconditions are unnecessary because we work with actual values.
+However, with abstract propositions, preconditions become <em>assumptions</em> about (universally quantified) variables.</p>
+<p>We initially obtain these assumptions as part of the proposition we are verifying.
+For example, in our <code>list_append</code> claim:</p>
+<div id="admonition-claim-1" class="admonition admonish-question" role="note" aria-labelledby="admonition-claim-1-title">
+<div class="admonition-title">
+<div id="admonition-claim-1-title">
+<p>Claim</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-claim-1"></a>
+</div>
+<div>
+<p>For any lists <code>l1</code> and <code>l2</code>, <code>len(l1) + len(l2)</code> ≡ <code>len(list_append(l1, l2))</code>.</p>
+</div>
+</div>
+<p>The text "for any <em>lists</em> …" introduces the precondition that <code>l1</code> and <code>l2</code> are lists.</p>
+<p>As another example, consider the post-condition of <code>merge</code> now realized as a proposition:</p>
+<div id="admonition-claim-2" class="admonition admonish-question" role="note" aria-labelledby="admonition-claim-2-title">
+<div class="admonition-title">
+<div id="admonition-claim-2-title">
+<p>Claim</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-claim-2"></a>
+</div>
+<div>
+<p>For any lists of numbers <code>l1</code> and <code>l2</code>, if <code>is_sorted(l1) ≡ True</code> and <code>is_sorted(l2) ≡ True</code> then <code>is_sorted(merge(l1, l2)) ≡ True</code>.</p>
+</div>
+</div>
+<p>In addition to the assumptions we have about the <em>type</em> of the variables, we can also have arbitrary <em>properties</em> about these variables.</p>
+<p>Our claim is of the form "if … then …" where the preconditions sit between the "if" and "then"
+We assume these preconditions and then go on to prove the claim which follows the "then."
+In this example, the additional preconditions are that:</p>
+<ul>
+<li><code>is_sorted(l1) ≡ True</code></li>
+<li><code>is_sorted(l2) ≡ True</code></li>
+</ul>
+<p>And then the claim we prove with these assumptions is:</p>
+<ul>
+<li><code>is_sorted(merge(l1, l2))</code>.</li>
+</ul>
+<h3 id="short-hand-for-propositions-involving-booleans"><a class="header" href="#short-hand-for-propositions-involving-booleans">Short-hand for Propositions Involving Booleans</a></h3>
+<p>As we discuss preconditions throughout this reading and beyond, we will frequently work with preconditions that assert an equivalence between two expressions of boolean type.
+For example, to state the proposition that <code>x</code> is less than <code>y</code>, we would declare that it is equivalent to <code>True</code>:</p>
+<ul>
+<li><code>x &lt; y ≡ True</code></li>
+</ul>
+<p>This notation is quite taxing to write where we have many preconditions in our reasoning.
+Instead, we'll use shorthand, taking advantage of the similarities between boolean expressions and propositions.
+When we write the following proposition:</p>
+<ul>
+<li><code>x &lt; y</code></li>
+</ul>
+<p>We really mean the complete equivalence <code>x &lt; y ≡ True</code>.
+With this notation, we can rewrite the above claim above more elegantly as:</p>
+<div id="admonition-claim-3" class="admonition admonish-question" role="note" aria-labelledby="admonition-claim-3-title">
+<div class="admonition-title">
+<div id="admonition-claim-3-title">
+<p>Claim</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-claim-3"></a>
+</div>
+<div>
+<p>For any lists of numbers <code>l1</code> and <code>l2</code>, if <code>is_sorted(l1)</code> and <code>is_sorted(l2)</code> then <code>is_sorted(merge(l1, l2))</code>.</p>
+</div>
+</div>
+<div id="admonition-on-mathematical-short-hand" class="admonition admonish-info" role="note" aria-labelledby="admonition-on-mathematical-short-hand-title">
+<div class="admonition-title">
+<div id="admonition-on-mathematical-short-hand-title">
+<p>On Mathematical Short-hand</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-on-mathematical-short-hand"></a>
+</div>
+<div>
+<p>This short-hand is our first example of a common mathematics practice.
+In our pursuit of a rigorous, formal definition, we might create a situation where it is highly inconvenient to use this definition in prose.
+Perhaps this definition is too verbose.
+Or maybe it is highly parameterized, but in the common case, the parameterization is unnecessary.</p>
+<p>In these situations, we introduce short-hand notation in mathematics to concisely write down our ideas.
+An example of this notation are <em>symbols</em>, <em>e.g.</em>, <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">x</span><span class="mord">∣</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span></span></span> for "<span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span></span></span></span> divides <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span></span></span>."
+Alternatively, we may introduce <em>puns</em>, seemingly invalid mathematical syntax, given special meaning in context.
+For example, a Racket expression is not a program equivalence.
+However, in the above example, we introduce the pun that a <em>boolean</em> Python expression is, implicitly, a program equivalence with <code>True</code>.</p>
+<p>Mathematical short-hand is a secret sauce of writing mathematics.
+It allows us to write beautifully concise yet thoroughly precise prose.
+However, if you aren't aware of the meaning of symbols and puns in a piece of mathematical writing, you can quickly become lost.
+Keep an eye out for such short-hand when reading mathematical prose, and you will find your comprehension to go up rapidly as a result.</p>
+</div>
+</div>
+<div id="admonition-exercise" class="admonition admonish-question" role="note" aria-labelledby="admonition-exercise-title">
+<div class="admonition-title">
+<div id="admonition-exercise-title">
+<p>Exercise</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-exercise"></a>
+</div>
+<div>
+<p>Write a claim about the behavior of the following function that implies its correctness.
+Make sure to include any necessary preconditions in your claim.</p>
+<pre><code class="language-Python">def index_of(x, l):
+    '''Returns the (0-based) index of element x in list l'''
+    # ...
+    pass
+</code></pre>
+</div>
+</div>
+<h3 id="tracking-and-utilizing-assumptions"><a class="header" href="#tracking-and-utilizing-assumptions">Tracking and Utilizing Assumptions</a></h3>
+<p>Assumptions about our variables initially come from preconditions we write into our claims.
+How do we use these assumptions in our proofs of program correctness?
+It turns out we have been doing this already without realizing it!</p>
+<p>For example, in our analysis of the boolean <code>my_and</code> function from our previous reading, we said the following:</p>
+<blockquote>
+<p>Because <code>b</code> is a boolean, either <code>b</code> is <code>True</code> or <code>b</code> is <code>False</code>.</p>
+</blockquote>
+<p>This line of reason is only correct because we <em>assumed</em> via a precondition:</p>
+<div id="admonition-claim-4" class="admonition admonish-question" role="note" aria-labelledby="admonition-claim-4-title">
+<div class="admonition-title">
+<div id="admonition-claim-4-title">
+<p>Claim</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-claim-4"></a>
+</div>
+<div>
+<p>For all booleans <code>b</code>, <code>my_and(b, False) ≡ False</code>.</p>
+</div>
+</div>
+<p>That <code>b</code> is indeed a boolean.
+If we did not have such a precondition, this line of reasoning would be invalid!</p>
+<p>When we have an assumption that asserts the type of a universally quantified variable, we can use that assumption to conclude that the variable is of a particular <em>shape</em> according to that type.
+For example:</p>
+<ul>
+<li>A variable that is a natural number is zero or a positive integer.</li>
+<li>A variable that is a function is bound to a <code>lambda</code> value, <em>e.g.</em>, <code>(lambda (n) (+ n 1))</code>.</li>
+<li>A variable that is a boolean is either <code>#t</code> or <code>#f</code>.</li>
+</ul>
+<p>Furthermore, if an operation requires a value of a particular type as a precondition, a type assumption about a variable allows us to conclude that the variable fulfills that precondition.
+For example, if we know that <code>x</code> is a number then we know that <code>x &gt; 3</code> will produce a boolean result instead of potentially throwing an error.</p>
+<h3 id="utilizing-general-assumptions"><a class="header" href="#utilizing-general-assumptions">Utilizing General Assumptions</a></h3>
+<p>Besides type assumptions, we can also assert general properties about our variables as preconditions.
+In our <code>merge</code> example, we assumed that the input lists satisfied the <code>is_sorted</code> predicate, <em>i.e.</em>, were sorted.
+We can then use this fact to deduce other properties of our lists that will help us ascertain correctness, <em>e.g.</em>, that the smallest elements of each list are at the front.</p>
+<p>Because these properties are general, we have to reason about them in a context-specific manner.
+Let's look at a simple example of reasoning about one common kind of assumption: <em>numeric constraints</em>.
+Consider the following simple numeric function:</p>
+<pre><code class="language-python">def double(n):
+    return n * 2
+</code></pre>
+<p>And suppose we want to prove the following claim about this function:</p>
+<div id="admonition-claim-5" class="admonition admonish-question" role="note" aria-labelledby="admonition-claim-5-title">
+<div class="admonition-title">
+<div id="admonition-claim-5-title">
+<p>Claim</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-claim-5"></a>
+</div>
+<div>
+<p>For all numbers <code>n</code>, if <code>n &gt; 0</code> then <code>double(n) &gt; 0</code>.</p>
+</div>
+</div>
+<p>Employing our symbolic techniques, we first assume that <code>n</code> is an arbitrary number.
+However, the claim that follows the quantification of <code>n</code> includes a precondition---it is of the form "if … then … ".
+Therefore, in addition to <code>n</code>, we also gain the assumption that <code>n &gt; 0</code>, <em>i.e.</em>, <code>n</code> is positive.</p>
+<p>When we go prove that <code>double(n) &gt; 0</code>, we know from our model of computation that:</p>
+<pre><code class="language-python">double(n) &gt; 0 --&gt; n * 2 &gt; 0
+</code></pre>
+<p>This resulting expression is not always true.
+In particular, if <code>n</code> is non-negative, then <code>n * 2</code> will be negative and thus less than <code>0</code>.
+However, our assumption that <code>n &gt; 0)</code> tells us this is not the case!</p>
+<p>Here is a complete proof of the claim that employs this observation.</p>
+<div id="admonition-proof" class="admonition admonish-success" role="note" aria-labelledby="admonition-proof-title">
+<div class="admonition-title">
+<div id="admonition-proof-title">
+<p>Proof</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-proof"></a>
+</div>
+<div>
+<p><strong>Claim</strong>: For all numbers <code>n</code>, if <code>n &gt; 0</code> then <code>(double n) &gt; 0</code>.</p>
+<p><em>Proof</em>.
+Let <code>n</code> be a number and assume that <code>n &gt; 0</code>.
+By the definition of <code>double</code> we have that:</p>
+<pre><code class="language-python">double(n) &gt; 0 --&gt; n * 2 &gt; 0.
+</code></pre>
+<p>However, by our assumption that <code>n &gt; 0</code> we know that <code>n * 2</code> is a positive quantity---multiplying two positive numbers results in a positive number.
+Therefore, <code>n * 2 &gt; 0</code> holds.</p>
+</div>
+</div>
+<h3 id="being-explicit-when-invoking-assumptions"><a class="header" href="#being-explicit-when-invoking-assumptions">Being Explicit When Invoking Assumptions</a></h3>
+<p>In the above proof, I was explicit about:</p>
+<ol>
+<li><em>When</em> I used an assumption in a step of reasoning, and</li>
+<li><em>How</em> I used that assumption to infer new information.</li>
+</ol>
+<p>At this stage of your development as a mathematician, you should do the same for <em>any</em> other assumption you employ in a proof.
+As an example of what <em>not to do</em>, here is the same proof but without the explicit call-out of the assumption:</p>
+<div id="admonition-proof-1" class="admonition admonish-success" role="note" aria-labelledby="admonition-proof-1-title">
+<div class="admonition-title">
+<div id="admonition-proof-1-title">
+<p>Proof</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-proof-1"></a>
+</div>
+<div>
+<p><strong>Claim</strong>: For all numbers <code>n</code>, if <code>n &gt; 0</code> then <code>double(n) &gt; 0</code>.</p>
+<p><em>Proof</em>.
+Let <code>n</code> be a number and assume that <code>n &gt; 0</code>.
+By the definition of <code>double</code> we have that:</p>
+<pre><code class="language-python">double(n) &gt; 0 --&gt; n * 2 &gt; 0.
+</code></pre>
+<p>Therefore, <code>n * 2 &gt; 0</code> holds.</p>
+</div>
+</div>
+<p>This proof is <em>valid</em>.
+The steps presented and the conclusion are sound.
+However, this is a <em>less formal proof</em> because it has left some steps of reasoning <em>implicit</em>.
+In this course, we aim for rigorous, formal proof, and so we should not leave <em>any</em> steps implicit in our reasoning.</p>
+<p>That being said, we will quickly find that dogmatically following this guidance will lead us to ruin.
+Analogous to programming, if we write our proofs at too low of a level, we will get lost in the weeds with low-level details and lose sight of the bigger picture.</p>
+<p>For now, let's be ultra-explicit about our reasoning and follow the formula above whenever we invoke an assumption.
+However, because reasoning about type constraints, <em>e.g.</em>, happens so frequently, it is okay if you elide <em>when</em> you use a type assumption in your proofs.
+For example, instead of saying:</p>
+<blockquote>
+<p>By our assumptions, we know <code>b</code> is a boolean.
+Therefore, <code>b</code> must either be <code>True</code> or <code>False</code>.</p>
+</blockquote>
+<p>You can, instead, say:</p>
+<blockquote>
+<p><code>b</code> is either <code>True</code> or <code>False</code>.</p>
+</blockquote>
+<p>However, you should still be clear when you are assuming the type of a variable using a "let"-style statement, <em>e.g.</em>,</p>
+<blockquote>
+<p>Let <code>b</code> be a boolean.</p>
+</blockquote>
+<h3 id="assumptions-that-arise-during-analysis"><a class="header" href="#assumptions-that-arise-during-analysis">Assumptions that Arise During Analysis</a></h3>
+<p>Assumptions arise not only when we initially process our claim.
+We also gain new assumptions during the proving process.
+For example, let's consider the following simple function:</p>
+<pre><code class="language-python">def nat_sub(x, y):
+    if x &lt; y:
+        return 0
+    else:
+        return x - y
+</code></pre>
+<p>And the following claim about this function:</p>
+<div id="admonition-claim-6" class="admonition admonish-question" role="note" aria-labelledby="admonition-claim-6-title">
+<div class="admonition-title">
+<div id="admonition-claim-6-title">
+<p>Claim</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-claim-6"></a>
+</div>
+<div>
+<p>For all numbers <code>x</code> and <code>y</code>, <code>nat_sub(x, y) &gt;= 0</code>.</p>
+</div>
+</div>
+<p>Here is a partial proof of this claim:</p>
+<div id="admonition-proof-2" class="admonition admonish-success" role="note" aria-labelledby="admonition-proof-2-title">
+<div class="admonition-title">
+<div id="admonition-proof-2-title">
+<p>Proof</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-proof-2"></a>
+</div>
+<div>
+<p>Let <code>x</code> and <code>y</code> be numbers.
+Then we have that:</p>
+<pre><code class="language-python">    nat_sub(x, y)
+--&gt; { if x &lt; y: return 0 else: return x - y }
+</code></pre>
+</div>
+</div>
+<p>But now, we're stuck!
+We need to evaluate the guard to proceed, but we don't know how the expression <code>x &lt; y</code> will evaluate.
+However, we do know the following:</p>
+<ul>
+<li><code>x</code> and <code>y</code> are numbers.</li>
+<li><code>x &lt; y</code> will produce a result because <code>x</code> and <code>y</code> are numbers.</li>
+<li>The result of <code>x &lt; y</code> is either <code>True</code> or <code>False</code> because the expression has boolean type.</li>
+</ul>
+<p>Because of this, we can <em>proceed by case analysis</em> on the result of <code>x &lt; y</code>: it evaluates to either <code>True</code> or <code>False</code>.
+Let us consider each case in turn:</p>
+<div id="admonition-proof-3" class="admonition admonish-success" role="note" aria-labelledby="admonition-proof-3-title">
+<div class="admonition-title">
+<div id="admonition-proof-3-title">
+<p>Proof</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-proof-3"></a>
+</div>
+<div>
+<ul>
+<li>
+<p><code>x &lt; y --&gt; True</code>:
+In this case:</p>
+<pre><code class="language-python">    { if x &lt; y: return 0 else: return x - y }
+--&gt; { if True: return 0 else: x - y }
+--&gt; { return 0 }
+--&gt; 0
+</code></pre>
+<p>So <code>nat_sub(x, y) --&gt;* 0</code> which is greater-than or equal to <code>0</code>.</p>
+</li>
+<li>
+<p><code>x &lt; y --&gt; False</code>:
+In this case</p>
+<pre><code class="language-python">    { if x &lt; y: return 0 else: return x - y }
+--&gt; { if False: return 0 else: x - y }
+--&gt; { return x - y }
+--&gt; x - y
+</code></pre>
+</li>
+</ul>
+</div>
+</div>
+<p>Here, we seem to be stuck again.
+We don't know how to proceed with the subtraction since <code>x</code> and <code>y</code> are held abstract.
+However, we must remember that in this case, we are assuming that <code>x &lt; y</code> is <code>False</code>.
+Therefore, we know that <code>x</code> is greater than or equal to <code>y</code>.
+Because we know the difference between a larger number and a smaller number is positive, we can conclude that <code>x - y &lt;= 0</code> as desired.</p>
+<p>Let's see this reasoning together in a complete proof of our claim.</p>
+<div id="admonition-proof-4" class="admonition admonish-success" role="note" aria-labelledby="admonition-proof-4-title">
+<div class="admonition-title">
+<div id="admonition-proof-4-title">
+<p>Proof</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-proof-4"></a>
+</div>
+<div>
+<p><strong>Claim</strong>: for all numbers <code>x</code> and <code>y</code>, <code>nat_sub(x, y) &gt;= 0</code>.</p>
+<p><em>Proof</em>.
+Let <code>x</code> and <code>y</code> be numbers.
+Then we have that:</p>
+<pre><code class="language-python">    nat_sub(x, y)
+--&gt; { if x &lt; y: return 0 else: return x - y }
+</code></pre>
+<p>Either <code>x &lt; y --&gt; #t</code> or <code>x &lt; y --&gt; #f</code>.</p>
+<ul>
+<li>
+<p><code>x &lt; y --&gt; True</code>:
+In this case:</p>
+<pre><code class="language-python">    { if x &lt; y: return 0 else: return x - y }
+--&gt; { if True: return 0 else: x - y }
+--&gt; { return 0 }
+--&gt; 0
+</code></pre>
+<p>Thus, <code>nat_sub(x, y) --&gt;* 0</code>, a non-negative result.</p>
+</li>
+<li>
+<p><code>x &lt; y --&gt; False</code>.
+Then we have:</p>
+<pre><code class="language-python">    { if x &lt; y: return 0 else: return x - y }
+--&gt; { if False: return 0 else: x - y }
+--&gt; { return x - y }
+--&gt; x - y
+</code></pre>
+<p>From our case analysis, we assume that <code>x &lt; y</code> does not hold.
+Thus, we know that <code>x &gt;= y</code>.
+Because we know subtracting an equal-or-smaller number from a larger number results in a non-negative quantity, we can conclude that <code>x - y &lt;= 0</code>.</p>
+</li>
+</ul>
+</div>
+</div>
+<p>In summary, we can obtain assumptions from places other than our claims, <em>e.g.</em>, through case analysis or the post-condition of an applied function.
+We can then use these newly acquired facts to complete our proofs.</p>
+<div id="admonition-exercise-nesting" class="admonition admonish-question" role="note" aria-labelledby="admonition-exercise-nesting-title">
+<div class="admonition-title">
+<div id="admonition-exercise-nesting-title">
+<p>Exercise (Nesting)</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-exercise-nesting"></a>
+</div>
+<div>
+<p>Consider the following conditional statement in Python:</p>
+<pre><code class="language-python">if x &lt; 0:
+    return e1
+elif x &lt;= 3:
+    return e2
+elif x == 5:
+    return e3
+elif x &lt;= 8:
+    return e4
+else
+    return e5
+</code></pre>
+</div>
+</div>
+<p>For each branch expressions <code>e1</code> through <code>e5</code> above, describe the <em>assumptions about <code>x</code></em> you can make by entering that branch of the <code>cond</code>.</p>
+<p>(<em>Hint</em>: make sure you account for the fact that to reach a branch, all the previous branches must have returned false.)</p>
+<h2 id="proof-states-and-proving"><a class="header" href="#proof-states-and-proving">Proof States and Proving</a></h2>
+<p>In summary, we have introduced <em>assumptions</em> into our proofs of program correctness.
+These assumptions come from preconditions or through analysis of our code.
+We use these assumptions to prove our claim.
+Because our claim evolves throughout the proof, <em>e.g.</em>, it is more accurate to say that we use assumptions to prove a <em>goal proposition</em> where the initial goal proposition is our original claim.</p>
+<p>Surprisingly, it turns out that <em>all</em> mathematical proofs can be thought of in these terms!</p>
+<div id="admonition-definitions-1" class="admonition admonish-info" role="note" aria-labelledby="admonition-definitions-1-title">
+<div class="admonition-title">
+<div id="admonition-definitions-1-title">
+<p>Definitions</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-definitions-1"></a>
+</div>
+<div>
+<p><strong>Proof State</strong>: the <strong>state of a proof</strong> or <strong>proof state</strong> is a pair of a <em>set of assumptions</em> and a <em>goal proposition</em> to prove.</p>
+<p><strong>Proof</strong>: a <strong>proof</strong> is a sequence of logical steps that manipulate a proof state towards a final, provable result.</p>
+</div>
+</div>
+<p>When either reading or writing a mathematical proof, we should keep these definitions in mind.
+In particular, we have to be aware at <em>every point of the proof</em>:</p>
+<ul>
+<li>What is our set of assumptions?</li>
+<li>What are we trying to prove?</li>
+</ul>
+<div id="admonition-exercise-entry-fees-" class="admonition admonish-question" role="note" aria-labelledby="admonition-exercise-entry-fees--title">
+<div class="admonition-title">
+<div id="admonition-exercise-entry-fees--title">
+<p>Exercise (Entry Fees, ‡)</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-exercise-entry-fees-"></a>
+</div>
+<div>
+<p>Consider the following function that calculates the entry fee of a single ticket to Disney World in 2021 (mined from <a href="https://disneyworld.disney.go.com/admission/tickets/theme-parks/">the Disney website</a>):</p>
+<pre><code class="language-scheme">def calculate_price(day_of_week, age, is_park_hopper):
+    return 115 + \
+           -5 if age &lt; 10 else 0 + \
+           14 if is_friday_or_weekend(day_of_week) else 0 + \
+           65 if is_park_hopper else 0
+</code></pre>
+<p>(For conciseness sake, the code above utilizes two lesser known features of Python:</p>
+<ul>
+<li>You can split up a long line into multiple lines by adding '\' to the end of each line.</li>
+<li>The <em>conditional expression</em> operator <code>e2 if e1 else e3</code> is analogous to the Scheme conditional expression <code>(if e1 e2 e3)</code>.
+If <code>e1</code> evaluates to <code>True</code>, the conditional expression evaluates to whatever <code>e2</code> evaluates to.
+Otherwise, it evaluates to whatever <code>e3</code> evaluates to.)</li>
+</ul>
+<p>Prove the following claim:</p>
+<p><strong>Claim</strong>: For all days of the week <code>d</code>, natural numbers <code>n</code>, and boolean <code>b</code>, if <code>b ≡ True</code> then <code>calculate-price(d, n, b) &gt;= 175</code>.</p>
+<p>(<em>Note</em>: yea, Disney World is expensive, huh?)</p>
+</div>
+</div>
+<footer>Tools for Thinking About Programs: Mathematical Foundations © 2025 by <a href='https://iampmo.com'>Peter-Michael Osera</a> is licensed under <a href='https://creativecommons.org/licenses/by-nc/4.0/'>CC BY-NC 4.0</a>.</footer>
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../program-correctness/symbolic-execution.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../program-correctness/inductive-reasoning.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../program-correctness/symbolic-execution.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../program-correctness/inductive-reasoning.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        <script>
+            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
+            const socket = new WebSocket(wsAddress);
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

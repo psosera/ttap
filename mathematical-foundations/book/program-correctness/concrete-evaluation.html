@@ -1,0 +1,818 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Concrete Evaluation - Tools for Thinking About Programs: Mathematical Foundations</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="../highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="../tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href=".././book.css">
+        <link rel="stylesheet" href=".././mdbook-admonish.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Tools for Thinking About Programs: Mathematical Foundations</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+<h1 id="concrete-evaluation"><a class="header" href="#concrete-evaluation">Concrete Evaluation</a></h1>
+<p>We begin our journey into the foundations of computer science by first studying one of its key applications to computer programming: <em>program correctness</em>.
+Rigorously stating and proving program properties will require us to deep-dive into <em>mathematical logic</em>, the sub-field of mathematics devoted to modeling <em>deductive reasoning</em>.
+Deductive reasoning is the foundation for virtually all activities in computer science, whether you are designing an algorithm, verifying the correctness of a circuit,  or assessing a program's complexity.
+In this manner, this initial portion of our investigation of the foundations of computer science is, quite literally, the <em>cornerstone</em> of everything you do in this field moving forward.</p>
+<h2 id="why-functional-programming"><a class="header" href="#why-functional-programming">Why Functional Programming?</a></h2>
+<p>In this course, we'll use the <a href="https://python.org">Python programming language</a> as our vehicle for studying program correctness.
+In particular, we'll focus on a <em>pure, functional</em> subset of Python that corresponds to other function languages such as the Scheme we introduce in CSC 151.
+We do this because, as we will see shortly, <em>pure, functional languages</em> admit for a <em>simple, substitution-based</em> model of computation.
+By "pure," we mean that the language does not allow functions to produce <em>side-effects</em>.
+A side-effect is some behavior observable to the caller of the function beyond the function's return value.</p>
+<p>The canonical example of a side-effect is the <em>mutation of global variables</em>.
+For example, in Python:</p>
+<pre><code class="language-python">glob = 0    # a global variable
+
+def increment_global():
+    # in Python, we have to declare a global variable as
+    # locally accessible with a `global` declaration
+    global glob
+    glob = glob + 1
+
+def main():
+    print(glob)           # 0
+    increment_global()
+    print(glob)           # 1
+    increment_global();
+    print(glob)           # 2
+    increment_global();
+    increment_global();
+    print(glob)           # 4
+</code></pre>
+<p>The <code>increment_global</code> function takes no parameters and produces no output.
+Its sole task is to produce a side-effect: change the state of <code>global</code> by incrementing its value.
+Since the function does not return a value, <code>main</code> can only use <code>increment_global</code> for its side-effect by calling the function and observing the change to <code>global</code>.</p>
+<p>We'll have more to say about side-effects and their relationship with the substitutive model of computation we introduce later in this reading.
+For now, note that ultimately it is not the <em>language</em> that is important here.
+What is important is whether we are considering a <em>pure fragment</em> of that language, instead.
+Indeed, the lessons we learn here regarding program correctness apply to any program that behaves in a pure manner, <em>i.e.</em>, has no side-effects.
+For example, we can easily translate our model of computation to the pure fragment Python!</p>
+<p>This fact supports a general maxim about programming you have hopefully heard at some point:</p>
+<blockquote>
+<p>Minimize the number of side-effects in your code.</p>
+</blockquote>
+<p>Intuitively, complicated code with side-effects is frequently tricky to reason about, <em>e.g.</em>, explicit pointer manipulation in C.
+Our study of program correctness in this course will give us concrete reasons why this is indeed the case.</p>
+<h2 id="program-correctness"><a class="header" href="#program-correctness">Program Correctness</a></h2>
+<p>Program correctness is a particularly topical application of logic to start with because every developer cares that their programs are correct.
+However, what do we mean by <em>correctness</em>?</p>
+<p>For this example, we'll first introduce several functions so that we can operate on Python lists like Scheme lists.
+These functions give common names to common list indexing and access tricks that we would use in Python to achieve the same effect.</p>
+<pre><code class="language-python"># returns the head (first element) of list l
+def head(l):
+    return l[0]
+
+# return the tail of l, a list that is l but without its first element
+def tail(l):
+    return l[1:]
+
+# return true iff list l is empty
+def is_empty(l):
+    return len(l) == 0
+
+# return a new list that is the result of consing x onto the front of l
+def cons(x, l):
+    return [x, *l]
+</code></pre>
+<p>With these functions in mind, consider the following Python function that appends two lists together recursively:</p>
+<pre><code class="language-python">def list_append(l1, l2):
+    if is_empty(l1, l2):
+        return l2
+    else:
+        return cons(head(l1), list_append(tail(l1), l2))
+</code></pre>
+<p>What does it mean for <code>list_append</code> to be "correct"?
+Of course, we have a strong intuition about how <code>list_append</code> should behave: the result of <code>list_append</code> should be a list that "glues" <code>l2</code> onto the end of <code>l1</code>.
+But being more specific about what this means without saying the word "append" is tricky!
+As we try to crystallize what it means for <code>list_append</code> to be correct, we run into two issues:</p>
+<p><strong>Generality</strong></p>
+<p>A natural way to specify the correctness of <code>list_append</code> is through a <em>test suite</em>.
+For example, in Python, we can write a simple collection of tests using the <code>unittest</code> module:</p>
+<pre><code class="language-python">import unittest
+
+class list_appendTest(unittest.TestCase):
+    def test(self):
+      self.assertEqual(list_append([1, 2], [3, 4, 5]), [1, 2, 3, 4, 5])
+      self.assertEqual(list_append([], [1, 2, 3, 4 ,5]))
+      self.assertEqual(list_append([1, 2, 3, 4, 5], []))
+
+unittest.main()
+</code></pre>
+<p>Note that these tests exemplify very <em>specific</em> properties about the behavior of <code>list_append</code>.
+A test case demands that when a function is given a particular set of inputs, <em>e.g.</em>, <code>[1, 2]</code> and <code>[3, 4, 5]</code>, that the function must produce the output <code>[1, 2, 3, 4, 5]</code>.
+You can't get more specific about the behavior of <code>list-append</code> than that!</p>
+<p>However, are these tests enough?
+While they cover a wide variety of the potential behavior of <code>list_append</code>, they certainly don't cover <em>every possible execution</em> of the function.
+For example, the tests don't cover when <code>list-append</code> is given two empty (<code>[]</code>) lists.
+They also don't cover the case where the expected output is not <code>[1, 2, 3, 4, 5]</code>!
+In this sense, while tests are <em>highly specific</em>, they do not necessarily <em>generalize</em> to the full behavior of the function.
+This always leaves us with an inkling of doubt that our functions are truly correct.</p>
+<p><strong>Specificity</strong></p>
+<p>How might we arrive at a more general notion of program correctness?
+Rather than thinking about concrete test cases, we might consider more <em>abstract</em> propositions about the behavior of the function.
+Such abstract propositions are typically framed in terms of <em>relationships</em> between the inputs and outputs of the function.
+With <code>list_append</code>, we might think about the lengths of the input and output lists and how we might phrase our intuition about the function "gluing" its arguments together.
+This insight leads to the following property that we might check of the function:</p>
+<blockquote>
+<p>For all lists <code>l1</code> and <code>l2</code>, <code>len(l1) + len(l2)</code> <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">=</span></span></span></span> <code>len(list_append(l1, l2))</code>.</p>
+</blockquote>
+<p>To put another way, the lengths of <code>l1</code> and <code>l2</code> are <em>preserved</em> through <code>list_append</code>.
+That is, <code>list_append</code> doesn't (a) add any elements to the output beyond those found in the input, and (b) does not remove any elements.</p>
+<p>By virtue of its statement, this property applies to <em>all possible inputs</em> to <code>list_append</code>.
+So if we were able to prove that this property held, we knew that it holds for the function, irrespective of the inputs that you pass to the function (assuming that the inputs are lists, of course).
+This stands in contrast to test cases where we make claims over individual pairs of inputs and outputs.</p>
+<p>However, unlike a test case which is highly indicative of our intuition of correctness for this function, this property is only an <em>approximation</em> of our intuition.
+To put it another way, even if we know this property holds of every input to <code>list_append</code>, it doesn't mean that the function is correct!
+Here is an example implementation of <code>list_append</code> where the property holds, but the function is not "correct":</p>
+<pre><code class="language-python">define bad_list_append(l1, l2):
+    if is_empty(l1):
+        return l2
+    else:
+        cons(0, bad_list_append(tail(l1), l2))
+</code></pre>
+<p>The lengths of the input lists are preserved with <code>bad_list_append</code>.
+However, the output is <em>not</em> the result of gluing together the input lists!</p>
+<pre><code class="language-python">bad_list_append([1, 2, 3], [4, 5])
+&gt; [0, 0, 0, 4, 5]
+</code></pre>
+<p>Every element of <code>l1</code> is replaced with <code>0</code>!
+In this sense, our length-property of <code>list_append</code> is <em>general</em>---it applies to every possible set of inputs to the function---but not <em>specific</em>---the property only <em>partially</em> implies correctness.</p>
+<p><strong>Balancing Generality and Specificity</strong></p>
+<p>In summary, we've seen that test cases and general program properties sit on opposite ends of the generality-specificity spectrum.
+When we think about program correctness and verifying the behavior of programs, we are always trying to find the balance between generality and specify in our verification techniques.
+Ultimately, you can never be 100% sure that your program works in all cases---after all, <a href="https://www.wnycstudios.org/podcasts/radiolab/articles/bit-flip">a stray gamma ray can ruin whatever verification you have done about your program</a>.
+So when employing program verification techniques---testing, automated analysis, or formal proof---you must ultimately make an <em>engineering decision</em> based on context, needs, and available time and resources.
+We won't have time to dedicate substantial time to these pragmatic concerns in this course, but keep them in the back of your mind as we introduce formal reasoning for program correctness in the sections that follow.</p>
+<div id="admonition-exercise" class="admonition admonish-note" role="note" aria-labelledby="admonition-exercise-title">
+<div class="admonition-title">
+<div id="admonition-exercise-title">
+<p>Exercise</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-exercise"></a>
+</div>
+<div>
+<p>Consider the Python function <code>lcm(x, y)</code> from the <code>math</code> module which returns the <em>least-common multiple</em> (LCM) of the numbers <code>x</code> and <code>y</code>.
+For example, the LCM of 3 and 4 is 12, and the LCM of 6 and 15 is 30.</p>
+<ol>
+<li>Write a few <em>tests</em> for this function.</li>
+<li>Write a few <em>properties</em> of this function's behavior that implies its correctness.</li>
+</ol>
+</div>
+</div>
+<h2 id="a-substitutive-model-of-computation"><a class="header" href="#a-substitutive-model-of-computation">A Substitutive Model of Computation</a></h2>
+<p>In order to rigorously prove that a property holds of a program, we must first have a rigorous <em>model</em> of how a program executes.
+You likely have some intuition about how Python programs operate.
+For example, try to deduce what this poorly named function does:</p>
+<pre><code class="language-python">def foo(bar):
+    if is_empty(bar):
+        return 0
+    else:
+        1 + foo(tail(bar))
+</code></pre>
+<p>How might you proceed?
+You might imagine taking an example input, <em>e.g.</em>, <code>[9, 1, 2]</code>, and predicting how the function processes that input.
+With a few examples and prior knowledge of how conditionals and recursion work, you can likely deduce that this function calculates the length of the input list given to it.
+Our first goal, therefore, is to <em>formalize</em> this intuition, namely, explicate the <em>rules</em> that govern how Python programs operate.</p>
+<p>For a pure, functional programming language like the subset of Python that we work with, we can use a simple <em>substitutive model of computation</em> that extends how we evaluate arithmetic expressions.
+While simple, this model is capable of capturing the behavior of most Python programs we might consider in this course.</p>
+<h3 id="review-arithmetic-expressions"><a class="header" href="#review-arithmetic-expressions">Review: Arithmetic Expressions</a></h3>
+<p>First, let's recall the basic definitions and rules surrounding arithmetic expressions.
+We can divide these into two sorts:</p>
+<ul>
+<li><strong>Syntactic</strong> definitions and rules that govern when a collection of symbols is a <em>well-formed arithmetic expression</em>.</li>
+<li><strong>Semantic</strong> definitions and rules that give meaning to a well-formed arithmetic expression.
+"Meaning," in this case, can be thought of as "how the arithmetic expression computes."</li>
+</ul>
+<p><strong>Syntax</strong></p>
+<p>Here is an example of a well-formed arithmetic expression:</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">8</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">10</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">5</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">÷</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">2</span><span class="mclose">)</span></span></span></span></span></p>
+<p>In contrast, here is an ill-formed arithmetic expression:</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">4</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">5</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span></span><span class="mspace newline"></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mpunct">;</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">×</span><span class="mord">9</span><span class="mclose">)</span></span></span></span></span></p>
+<p>In this ill-formed arithmetic expression, the multiplication operator (×) is missing a left-hand argument.</p>
+<p>We can formalize this intuition about how to create a well-formed arithmetic expression with a <em>grammar</em>.
+Similarly to natural language, grammars concisely define <em>syntactic categories</em> as well as <em>rules of formation</em> for various textual objects.
+Here is a grammar for arithmetic expressions:</p>
+<pre><code>e ::= &lt;number&gt; | e1 + e2 | e1 - e2 | e1 × e2 | e1 ÷ e2 | (e)
+</code></pre>
+<p>To the left of the <code>::=</code> symbol is a variable, <code>e</code>, that represents a particular syntactic category.
+To the right are the rules for forming an element of that category.
+Here, the syntactic category is "arithmetic expressions," traditionally represented with the variable <code>e</code>.
+The rules are given as a collection of <em>possible forms</em> or <em>alternatives</em>, separated by pipes (<code>|</code>).
+The grammar says that a well-formed expression is either:</p>
+<ul>
+<li>A number (<code>&lt;number&gt;</code> is a placeholder for any number), or</li>
+<li>An <em>addition</em> of the form <code>e1 + e2</code> where <code>e1</code> and <code>e2</code> are expressions, or</li>
+<li>A <em>subtraction</em> of the form <code>e1 - e2</code> where <code>e1</code> and <code>e2</code> are expressions, or</li>
+<li>A <em>multiplication</em> of the form <code>e1 × e2</code> where <code>e1</code> and <code>e2</code> are expressions, or</li>
+<li>A <em>division</em> of the form <code>e1 ÷ e2</code> where <code>e1</code> and <code>e2</code> are expressions, or</li>
+<li>A <em>parenthesized expression</em> of the form <code>(e)</code> where <code>e</code> is an expression.</li>
+</ul>
+<div id="admonition-note" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-title">
+<div class="admonition-title">
+<div id="admonition-note-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note"></a>
+</div>
+<div>
+<p><strong>About Pronunciation</strong>: it may not seem like it, but pronunciation is an excellent tool for internalizing the meaning of a collection of mathematical symbols.
+Every collection of mathematical symbols is really a <em>sentence</em> in the natural language sense.
+In our grammar, we can pronounce <code>::=</code> as "is" and <code>|</code> as "or," so we obtain: "<code>e</code> is a number, or an addition, or … ."
+This makes it more intuitive and clear what the symbols represent.
+As we introduce more mathematical symbols throughout the course, always look for ways to pronounce these symbols as cohesive sentences.</p>
+</div>
+</div>
+<p>Importantly, the grammar is <em>recursive</em> in nature: the various alternatives contain expressions inside of them.
+This allows us to systematically break down an arithmetic expression into smaller parts, a fact that we leverage when we evaluate expressions.
+For example:</p>
+<ul>
+<li><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">8</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">10</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">5</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">÷</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">2</span><span class="mclose">)</span></span></span></span> is an expression.</li>
+<li><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">8</span></span></span></span> is an expression.</li>
+<li><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">10</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">5</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">÷</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">2</span><span class="mclose">)</span></span></span></span> is an expression.</li>
+<li><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">10</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">5</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">÷</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">2</span></span></span></span> is an expression.</li>
+<li><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">10</span></span></span></span> is an expression.</li>
+<li><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">5</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">÷</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">2</span></span></span></span> is an expression.</li>
+<li><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">5</span></span></span></span> is an expression.</li>
+<li><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">2</span></span></span></span> is an expression.</li>
+</ul>
+<p>Note that when interpreting symbols, there is sometimes ambiguity as to how different symbols <em>group together</em>.
+For example, consider the sub-expression from above:</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">10</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">5</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">÷</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">2.</span></span></span></span></span></p>
+<p>Should we interpret the expression as <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">10</span></span></span></span> and <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">5</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">÷</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">2</span></span></span></span> as in the example or alternatively <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">10</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">5</span></span></span></span> and <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">2</span></span></span></span>.
+Our knowledge of arithmetic tells us that the first interpretation is correct because the <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">÷</span><span class="mclose">)</span></span></span></span> operator takes <em>precedence</em> over the <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">−</span><span class="mclose">)</span></span></span></span> operator.
+Rules of precedence are, therefore, additional syntactic rules that we must consider in some cases.
+There also exist <em>rules of associativity</em> for some grammars that govern the <em>order</em> in which we group symbols when the same operator is invoked multiple times.
+For example, we traditionally interpret subtraction as <em>left-associative</em>.
+That is <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">2</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">3</span></span></span></span> is understood to be <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">2</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">3</span></span></span></span> rather than <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">2</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">3</span><span class="mclose">)</span></span></span></span>, <em>i.e.</em>, <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">2</span></span></span></span> goes first rather than <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">2</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">3</span></span></span></span>.</p>
+<p><strong>Semantics</strong></p>
+<p>Once we have established what a well-formed expression looks like, we then need to define what it <em>means</em>.
+In general, the meaning of a well-formed object is dependent entirely on the purpose of said object.
+For arithmetic expressions, we care about computing the result of such an expression, so we take that to be the <em>meaning</em> or <em>semantics</em> of an expression.</p>
+<p>Traditionally, we define the rules for computing or <em>evaluating</em> an arithmetic expression as follows:</p>
+<ol>
+<li>Find the next sub-expression to evaluate using the rules of associativity and precedence to resolve ambiguity.</li>
+<li>Substitute the value that the sub-expression evaluates to for that sub-expression in question.</li>
+<li>Repeat the process until you are left with a final value.</li>
+</ol>
+<p>A <em>value</em> is simply an expression that can not be evaluated or simplified any further.
+For arithmetic expressions, any number is a value.</p>
+<p>By repeating this process, we obtain a <em>series of evaluation steps</em> that an arithmetic expression takes before arriving at a final value.
+For example, here are the steps of evaluation taken for our sample expression from above:</p>
+<pre><code class="language-python">    8 × (10 - 5 ÷ 2)
+--&gt; 8 × (10 - 2.5)
+--&gt; 8 × 7.5
+--&gt; 60
+</code></pre>
+<p>Note that at each step, the resulting expressions are equivalent, <em>e.g.</em>, <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">8</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">10</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">5</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">÷</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">2</span><span class="mclose">)</span></span></span></span> and <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">8</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">7.5</span></span></span></span> are equivalent; both of these expressions are also equivalent to the value <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">60</span></span></span></span>.</p>
+<div id="admonition-exercise-1" class="admonition admonish-question" role="note" aria-labelledby="admonition-exercise-1-title">
+<div class="admonition-title">
+<div id="admonition-exercise-1-title">
+<p>Exercise</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-exercise-1"></a>
+</div>
+<div>
+<p>For each of the following arithmetic expressions, determine if (a) they are well-formed and (b) if they are well-formed, what is their step-by-step evaluation to a final value.</p>
+<ol>
+<li><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">100</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">÷</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">25</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">5</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">3</span><span class="mclose">)</span></span></span></span>.</li>
+<li><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">38</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">×</span><span class="mord">5</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">2</span><span class="mclose">)</span></span></span></span>.</li>
+<li><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">2</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">3</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">4</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">5</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">÷</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">6</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">7</span></span></span></span>.</li>
+</ol>
+</div>
+</div>
+<h2 id="core-python-and-the-substitutive-model"><a class="header" href="#core-python-and-the-substitutive-model">Core Python and the Substitutive Model</a></h2>
+<p>Our substitutive computational model for Python extends the rules for evaluating arithmetic expressions.
+Like arithmetic expressions, we will think of Python programs as an <em>expression</em> that evaluates to a final value.
+And like arithmetic, programs operate by stepwise evaluation, where we find the next sub-expression to evaluates and substitute.
+Python's rules for precedence mirror those from arithmetic.
+So we only need to consider precedence for Python's additional constructs beyond arithmetic.</p>
+<h3 id="expressions"><a class="header" href="#expressions">Expressions</a></h3>
+<p>For our purposes, well-formed Python expressions can be defined by the following grammar:</p>
+<pre><code>e ::= x                         (variables)
+    | &lt;number&gt;                  (numbers)
+    | True                      (true)
+    | False                     (false)
+    | lambda (x1, ..., xk): e   (lambdas)
+    | e(e1, ..., ek)            (function application)
+</code></pre>
+<p>In other words, a Racket expression is either:</p>
+<ul>
+<li>A variable <code>x</code>.</li>
+<li>A number.</li>
+<li>The true value <code>True</code>.</li>
+<li>The false value <code>False</code>.</li>
+<li>A Lambda with arguments <code>x1, ..., xk</code> and a body expression <code>e</code>.</li>
+<li>A function application applying arguments <code>e1, ..., ek</code> to function <code>e</code>.</li>
+</ul>
+<p>As an example, the following expression taken from our definition of <code>list_append</code> above:</p>
+<pre><code class="language-python">cons(head(l1), list_append(tail(l1), l2))
+</code></pre>
+<p>Is a well-formed expression that is a function application of two arguments to the function bound to the variable <code>cons</code>.
+Each argument is, itself, a function application.</p>
+<h3 id="values"><a class="header" href="#values">Values</a></h3>
+<p>In arithmetic, numbers were our only kind of value.
+In Racket, we have multiple kinds of values corresponding to the different types of Racket:</p>
+<ul>
+<li>Numbers are still values (of type <code>int</code> or <code>float</code> depending on whether number is integral or floating-point).</li>
+<li><code>True</code> and <code>False</code> are values (of <code>bool</code> type)</li>
+<li><code>lambda (x1, ..., xk): e</code> is also a value (of <code>function</code> type).</li>
+</ul>
+<h3 id="statements"><a class="header" href="#statements">Statements</a></h3>
+<p>In addition to expressions, Python also has <em>statements</em> defined by the following grammar:</p>
+<pre><code>s ::= s1                    (sequenced statements)
+      s2
+    | x = e                 (variable declaration/assignment)
+    | def f(x1, ..., xk):   (function declaration)
+          s
+    | return e              (returns)
+    | if e1:                (conditional statements)
+          s1
+      else:
+          s2
+</code></pre>
+<p>The sequenced statement looks syntactically odd on its own.
+But it captures idea that wherever one statement is expected, multiple statements can appear by placing them one line after the other at the same indentation level.
+For example:</p>
+<pre><code class="language-python">def f(x):
+    y = x + 1
+    z = y + 1
+    return x + y + z
+</code></pre>
+<p>Here, the body of <code>f</code> can be thought of as three statements or a single sequenced statement (<code>y = x + 1</code>) that, itself, precedes a single sequenced statement (<code>z = y + 1</code>), that, itself, precedes a final statement (<code>return x + y + z</code>).</p>
+<p>In contrast to expression, statements do <em>not</em> produce values.
+Instead, they have some kind of <em>effect</em> on the execution of our program.
+For example:</p>
+<ul>
+<li>Variable and function declarations introduce new variables into scope.</li>
+<li>Return statements causes the program to return from a function with a specified value.</li>
+<li>Conditional statements transfer the flow of execution into one of several possible branches.</li>
+</ul>
+<p>Reviewing our <code>list_append</code> definition, we see that it is a function declaration.
+The body of <code>list_append</code> is a single conditional and inside each branch of the conditional is a <code>return</code> statement.</p>
+<h2 id="substitutive-evaluation-for-python"><a class="header" href="#substitutive-evaluation-for-python">Substitutive Evaluation for Python</a></h2>
+<p>The heart of Python evaluation is function application.
+Function application directly generalizes arithmetic evaluation for operators:
+In arithmetic evaluation:</p>
+<ol>
+<li>We first evaluate the left- and right-hand arguments to the operator to values.</li>
+<li>We then apply the operator to those values.</li>
+</ol>
+<p>For example, for <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>, we first evaluate <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> to a value, call it <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> and then evaluate <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> to a value, call it <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>.
+We then carry out the addition of <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> and <span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>.</p>
+<p>To evaluate a function application, we first evaluate each of the sub-expressions of the function application to values.
+For example, consider the <code>inc</code> function defined to be:</p>
+<pre><code class="language-python">def inc(n):
+    return n + 1
+</code></pre>
+<p>if we have the expression, <code>inc(3 + (5 * 2))</code>, it evaluates as follows:</p>
+<pre><code class="language-python">    inc(3 + (5 * 2))
+--&gt; inc(3 + 10)
+--&gt; inc(13)
+</code></pre>
+<p>Once we arrive at this point, we need to evaluate the actual function application itself.
+In the case of primitive operations, we just carry them out directly and substitute their resulting values into the overall expression.
+However, arbitrary functions will perform arbitrary operations, so we cannot simply just "substitute the result"; we must calculate it by hand!</p>
+<p>To do this, we want to perform the following steps:</p>
+<ol>
+<li>We substitute the <em>body of the function be applied to</em> for the overall function application.</li>
+<li>We substitute the actual arguments passed to the function for each of its parameters.</li>
+<li>We then continue evaluation of the resulting expression like normal.</li>
+</ol>
+<p>However, you may have noticed in the Python grammar we presented earlier that the body of functions are <em>statements</em> and not <em>expressions</em>.
+This poses a conundrum for our evaluation model because we want each step to be a valid expression in our language.
+In other words, we don't want to an expression to step to a statement; that doesn't make sense!</p>
+<p>To reconcile this fact, we will introduce one additional expression form that only appears in our step-by-step evaluative model.
+The <em>statement-expression</em>, written <code>{s1; ...; sk}</code> represents a series of statements that are currently executing that <em>must</em> end in a <code>return</code> statement.
+The value that this <code>return</code> statement evaluates to is what this statement-expression evaluates to when it is done executing.</p>
+<p>For example, with our <code>inc</code> expression above:</p>
+<ol>
+<li>We substitute the statement-expression <code>{return n + 1}</code> for the function call <code>inc(13)</code>.</li>
+<li>We substitute <code>13</code> for <code>n</code> everywhere it occurs in this new statement-expression: <code>{return 13 + 1}</code>.</li>
+<li>We continue evaluation of the resulting expression like normal.</li>
+</ol>
+<p>To evaluate a statement-expression, we execute the first statement in the list of statements left to execute.
+In our example, this means we must evaluate <code>return 13 + 1</code>.
+Evaluating a return statement is straightforward: we evaluate the <code>return</code>'s expression to a value and then substitute this value for the <em>entire statement-expression</em>.</p>
+<p>This results in the following steps of evaluation:</p>
+<pre><code class="language-python">    (inc 13)
+--&gt; {return 13 + 1}
+--&gt; {return 14}
+--&gt; 14
+</code></pre>
+<p>Observe how the body of <code>inc</code> took two steps to evaluate: one to evaluate the <code>return</code>'s argument and one to return from the function call.</p>
+<p>These rules apply to functions of multiple arguments as well.
+For example, consider the following definition of a function that averages three numbers:</p>
+<pre><code class="language-python">def avg3(x1, x2, x3):
+    return (x1 + x2 + x3) / 3
+</code></pre>
+<p>Then the expression <code>avg3(2 * 5, 8, 1 + 2)</code> evaluates as follows:</p>
+<pre><code class="language-python">    avg3(2 * 5, 8, 1 + 2)
+--&gt; avg3(10, 8, 1 + 2)
+--&gt; avg3(10, 8, 3)
+--&gt; {return (10 + 8 + 3) / 3}
+--&gt; {return (18 + 3) / 3}
+--&gt; {return 21 / 3}
+--&gt; 7
+</code></pre>
+<p>Note that we evaluate the arguments to <code>avg3</code> in left-to-right order, one argument at a time.</p>
+<div id="admonition-exercise-2" class="admonition admonish-question" role="note" aria-labelledby="admonition-exercise-2-title">
+<div class="admonition-title">
+<div id="admonition-exercise-2-title">
+<p>Exercise</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-exercise-2"></a>
+</div>
+<div>
+<p>Consider the following Racket top-level definitions:</p>
+<pre><code class="language-python">def f(x, y):
+    return x + y
+
+def g(a, b):
+    return f(a, a) - f(b, b)
+</code></pre>
+<p>Use your mental model of computation to give the step-by-step evaluation of the following Racket expression: <code>g(5, 3)</code>.
+Check your work by evaluating this expression in DrRacket and verifying that you get the same final result.</p>
+</div>
+</div>
+<h3 id="return-statements"><a class="header" href="#return-statements">Return Statements</a></h3>
+<p>As described above, to evaluate a <code>return</code> statement:</p>
+<ol>
+<li>Evaluate the return's argument to a value.</li>
+<li>Substitute this value for the <code>return</code> statement's <em>immediate surrounding statement-expression</em>.</li>
+</ol>
+<p>In other words, <code>{return v} --&gt; v</code> for any value <code>v</code>.</p>
+<p>Statement-expressions can be nested because functions call other functions.
+In these situations, we simply evaluate the innermost statement-expression.
+This corresponds to evaluating the most recent function call!</p>
+<p>For example, consider the following example:</p>
+<pre><code class="language-python">def f(n):
+    return n + 1
+
+def g(a, b)
+    return f(a) + f(b)
+</code></pre>
+<p>And consider the step-by-step evaluation of <code>g(8, 2)</code>:</p>
+<pre><code class="language-python">    g(8, 2)
+--&gt; {return f(8) + f(2)}
+--&gt; {return {return 8 + 1} + f(2)}
+--&gt; {return {return 9} + f(2)}
+--&gt; {return 9 + f(2)}
+--&gt; {return 9 + {return 2 + 1}}
+--&gt; {return 9 + {return 3}}
+--&gt; {return 9 + 3}
+--&gt; {return 12}
+--&gt; 12
+</code></pre>
+<h3 id="conditionals"><a class="header" href="#conditionals">Conditionals</a></h3>
+<p>Recall that conditional statements have the form:</p>
+<pre><code class="language-python">if e:
+    s1
+else:
+    s2
+</code></pre>
+<p>To evaluate a conditional:</p>
+<ol>
+<li>We first evaluate the guard <code>e</code> to a value.
+This value ought to be a boolean value, <em>i.e.</em>, <code>True</code> or <code>False</code>.</li>
+<li>If the guard evaluates to <code>True</code>, we substitute statement <code>s1</code> for the entire conditional.</li>
+<li>Otherwise, the guard must have evaluated to <code>False</code>.
+We, therefore, substitute <code>s2</code> for the entire conditional.</li>
+<li>We then continue evaluating the resulting expression.</li>
+</ol>
+<p>Here is an example of a conditional within our substitutive model.</p>
+<pre><code class="language-python">    1 + { if 3 &lt; 5:
+              return 2
+          else:
+              return 5 * 5 }
+--&gt; 1 + { if False:
+              return 2
+          else:
+              return 5 * 5 }
+--&gt; 1 + { return 2 }
+--&gt; 1 + 2
+--&gt; 3
+</code></pre>
+<p>Note that it is sometimes quite onerous to write a conditional statement over multiple lines.
+When it is more prudent to do so, we will collapse everything onto a single line, <em>e.g.</em>,</p>
+<pre><code class="language-python">{if 3 &lt; 5: return 2 else: return 5 * 5}
+</code></pre>
+<h3 id="variable-declarations"><a class="header" href="#variable-declarations">Variable Declarations</a></h3>
+<p>Variable declarations allow us assign names to intermediate computations for the purposes of readability or performance (<em>i.e.</em>, to avoid redundant work).
+To evaluate a variable declaration of the form <code>x = e</code>:</p>
+<ol>
+<li>We evaluate <code>e</code> to a value <code>v</code>.</li>
+<li>We substitute every occurrence of <code>x</code> for <code>v</code> in the immediate statement-expression that encloses this assignment.</li>
+<li>Finally, we remove this variable declaration from the statement-expression that we are evaluating.</li>
+</ol>
+<p>Consider the following function that declares local variables:</p>
+<pre><code class="language-python">def f():
+    x = 1 + 1
+    y = x * 2
+    z = x * y
+    return x + y + z
+</code></pre>
+<p>Here's an example of the step-by-step evaluation of a call to this no-argument function:</p>
+<pre><code class="language-python">    f()
+--&gt; { x = 1 + 1
+      y = x * 2
+      z = x * y
+      return x + y + z }
+--&gt; { x = 2
+      y = x * 2
+      z = x * y
+      return x + y + z }
+--&gt; { y = 2 * 2
+      z = 2 * y
+      return 2 + y + z }
+--&gt; { y = 4
+      z = 2 * y
+      return 2 + y + z }
+--&gt; { z = 2 * 4
+      return 2 + 4 + z }
+--&gt; { z = 8
+      return 2 + 4 + z }
+--&gt; { return 2 + 4 + 8 }
+--&gt; { return 6 + 8 }
+--&gt; { return 14 }
+--&gt; 14
+</code></pre>
+<div id="admonition-note-1" class="admonition admonish-note" role="note" aria-labelledby="admonition-note-1-title">
+<div class="admonition-title">
+<div id="admonition-note-1-title">
+<p>Note</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-note-1"></a>
+</div>
+<div>
+<p><strong>A note on precision</strong>: while performing these step-by-step derivations, you might be tempted to skip steps, <em>e.g.</em>, evaluating all the arguments of a function call at once down to a single value.
+Resist this urge!
+One of the "hidden" skills we want to develop in working through these derivations is <em>unfailing attention to detail</em>.
+We want to be able to carry out mechanical processes like these derivations <em>exactly</em> as advertised.</p>
+<p>This is useful for two purposes:</p>
+<ol>
+<li>Such attention to detail is a skill necessary for effective algorithmic design.
+By maintaining this level of precision, you are more likely to catch corner cases and oddities in your design that you can fix before they later become bugs in code.</li>
+<li>More immediate for our purposes, skipping steps in deductive reasoning is the number one way to introduce erroneous reasoning in your proofs!
+Mechanics don't lie, so being able to explicate every step of a logical argument is necessary to be certain that your reasoning is sound.</li>
+</ol>
+<p>Later in the course, we will discuss <em>lifting</em> our reasoning to more high-level concerns where we are free to skip low-level steps so that we don't lose sight of the bigger picture of what we are trying to prove.
+However, our high-level reasoning <em>is always backed by low-level mechanics</em>.
+It is imperative your develop those mechanics now, otherwise, your high-level reasoning will be baseless!</p>
+</div>
+</div>
+<h2 id="additional-exercises"><a class="header" href="#additional-exercises">Additional Exercises</a></h2>
+<div id="admonition-exercise-additional-tracing-" class="admonition admonish-note" role="note" aria-labelledby="admonition-exercise-additional-tracing--title">
+<div class="admonition-title">
+<div id="admonition-exercise-additional-tracing--title">
+<p>Exercise (Additional Tracing, ‡)</p>
+</div>
+<a class="admonition-anchor-link" href="#admonition-exercise-additional-tracing-"></a>
+</div>
+<div>
+<p>Consider the following Python top-level definitions:</p>
+<pre><code class="language-python">def compute3(x, y, z):
+    intermediate = x + y
+    return z * intermediate + intermediate
+
+def triple(n):
+    return compute3(n, n, n)
+</code></pre>
+<p>Give the step-by-step evaluation (i.e., evaluation traces) for each of the following expressions.
+Make sure to write down all steps of evaluation as required by our substitutive model of computation!</p>
+<ol>
+<li><code>3 + (5 * (2 / (10 - 5)))</code></li>
+<li><code>compute3(2 * 3, 8 + 3, 1 / 2)</code></li>
+<li><code>triple(5 + 0.25)</code></li>
+</ol>
+<p>Make sure to check your work by entering these expressions into Python!</p>
+</div>
+</div>
+<footer>Tools for Thinking About Programs: Mathematical Foundations © 2025 by <a href='https://iampmo.com'>Peter-Michael Osera</a> is licensed under <a href='https://creativecommons.org/licenses/by-nc/4.0/'>CC BY-NC 4.0</a>.</footer>
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../course-tools.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../program-correctness/propositions-and-proofs.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../course-tools.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../program-correctness/propositions-and-proofs.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        <script>
+            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
+            const socket = new WebSocket(wsAddress);
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>
