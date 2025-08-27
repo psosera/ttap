@@ -16,6 +16,6 @@
               cd mathematical-foundations
               chmod +x ./deploy
               ./deploy
-            env:
+            # env:
               # Define environment variables if needed by your script
               # MY_SECRET: ${{ secrets.MY_SECRET }}
