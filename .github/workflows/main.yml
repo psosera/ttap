@@ -1,0 +1,21 @@
+    name: Deploy
+
+    on:
+      push:
+        branches:
+          - main
+
+    jobs:
+      deploy:
+        runs-on: ubuntu-latest
+        steps:
+          - name: Checkout repository
+            uses: actions/checkout@v4
+          - name: Run deployment script
+            run: |
+              cd mathematical-foundations
+              chmod +x ./deploy
+              ./deploy
+            env:
+              # Define environment variables if needed by your script
+              # MY_SECRET: ${{ secrets.MY_SECRET }}
