@@ -6,7 +6,13 @@ src = "src"
 title = "Tools for Thinking About Programs: Mathematical Foundations"
 
 [output.html]
-additional-css = ["./book.css", "./mdbook-admonish.css"]
+additional-css = [ 
+  "./css/book.css",
+  "./css/mdbook-admonish.css",
+  "./css/fontawesome.min.css",
+  "./css/brands.min.css",
+  "./css/solid.min.css"
+]
 no-section-label = true
 
 [preprocessor]
@@ -21,4 +27,4 @@ after = ["links"]
 
 [preprocessor.header-footer]
 headers = [{ padding = "\n" }]
-footers = [{ padding = "\n\n<footer>Tools for Thinking About Programs: Mathematical Foundations © 2025 by <a href='https://iampmo.com'>Peter-Michael Osera</a> is licensed under <a href='https://creativecommons.org/licenses/by-nc/4.0/'>CC BY-NC 4.0</a>.</footer>" }]
+footers = [{ padding = "\n\n<footer>Tools for Thinking About Programs: Mathematical Foundations © 2025 by <a href='https://iampmo.com'>Peter-Michael Osera</a> is licensed under <a href='https://creativecommons.org/licenses/by-nc/4.0/'>CC BY-NC 4.0</a>.<br/><a href='https://github.com/psosera/ttap'><i class='fa-brands fa-github'></i></a> ⋅ <em><a href='https://github.com/psosera/ttap/issues/new'>Report an issue</a></em></footer>" }]
