@@ -337,7 +337,7 @@ e ::= x                         (variables)
     | e(e1, ..., ek)            (function application)
 ~~~
 
-In other words, a Racket expression is either:
+In other words, a Python expression is either:
 
 +   A variable `x`.
 +   A number.
@@ -358,7 +358,7 @@ Each argument is, itself, a function application.
 ### Values
 
 In arithmetic, numbers were our only kind of value.
-In Racket, we have multiple kinds of values corresponding to the different types of Racket:
+In Python, we have multiple kinds of values corresponding to the different types of Python:
 
 +   Numbers are still values (of type `int` or `float` depending on whether number is integral or floating-point).
 +   `True` and `False` are values (of `bool` type)
@@ -489,13 +489,14 @@ Then the expression `avg3(2 * 5, 8, 1 + 2)` evaluates as follows:
 --> {return (10 + 8 + 3) / 3}
 --> {return (18 + 3) / 3}
 --> {return 21 / 3}
+--> {return 7}
 --> 7
 ~~~
 
 Note that we evaluate the arguments to `avg3` in left-to-right order, one argument at a time.
 
 ~~~admonish question title="Exercise"
-Consider the following Racket top-level definitions:
+Consider the following Python top-level definitions:
 
 ```python
 def f(x, y):
@@ -505,8 +506,8 @@ def g(a, b):
     return f(a, a) - f(b, b)
 ```
 
-Use your mental model of computation to give the step-by-step evaluation of the following Racket expression: `g(5, 3)`.
-Check your work by evaluating this expression in DrRacket and verifying that you get the same final result.
+Use your mental model of computation to give the step-by-step evaluation of the following Python expression: `g(5, 3)`.
+Check your work by evaluating this expression in Python and verifying that you get the same final result.
 ~~~
 
 ### Return Statements
