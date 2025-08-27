@@ -312,7 +312,7 @@ Note that at each step, the resulting expressions are equivalent, _e.g._, $8 × 
 For each of the following arithmetic expressions, determine if (a) they are well-formed and (b) if they are well-formed, what is their step-by-step evaluation to a final value.
 
 1.  $100 ÷ (25 × 5 - 3)$.
-2.  $(38 - × 5 + 2)$.
+2.  $38 - × 5 + 2)$.
 3.  $1 + 2 - 3 + 4 × 5 ÷ 6 - 7$.
 ~~~
 
