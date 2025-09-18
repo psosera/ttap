@@ -154,7 +154,7 @@ Note that in the inductive case, we acquire the following assumptions:
 
 These two facts combined with the knowledge that two multiplying two positive numbers produces a positive number tell us that the body of `factorial` produces a strictly positive result.
 
-~~~admonish problem title="Exercise (Racket Sum, ‡)"
+~~~admonish problem title="Exercise (Python Sum, ‡)"
 Consider the following Python definition.
 
 ```python
@@ -321,7 +321,7 @@ Compare the proof of positive for `factorial` versus $n!$ and note how they are 
 Notably, while the domains---programs versus arithmetic---are different, the proof technique---mathematical induction---remains the same!
 
 ~~~admonish problem title="Exercise (Math Sum, ‡)"
-In the **Racket Sum** exercise, you showed that the Racket `sum` function followed the arithmetic sum identity $1 + \cdots + n = \frac{n(n+1)}{2}$.
+In the **Python Sum** exercise, you showed that the Python `sum` function followed the arithmetic sum identity $1 + \cdots + n = \frac{n(n+1)}{2}$.
 Following the proof template above for mathematical induction for arithmetic to prove that the arithmetic sum identity is true:
 
 **Claim (Arithmetic Summation)**: $1 + \cdots + n = \frac{n(n+1)}{2}$.
