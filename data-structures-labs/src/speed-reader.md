@@ -34,8 +34,9 @@ Note that the average reading speed is approximately [250-300 words per minute](
 
 ## Project Setup
 
-For this project, create a new NetBeans project called `SpeedReader`.
-Using appropriate NetBeans defaults, your source files for this package should be located in the `edu.grinnell.csc207.speedreader` package.
+For this project, create a new VSCode project called `SpeedReader`.
+Your source files for this package should be located in the `edu.grinnell.csc207.speedreader` package.
+Your project should also use Maven for its build system and include a `pom.xml` file at the root along with a `src/main/java/...` file structure.
 
 In your project, add a `README.md` Markdown file with the following information:
 
@@ -46,6 +47,13 @@ In your project, add a `README.md` Markdown file with the following information:
     Remember to include all resources, including course materials, editors, peers, and online resources!
 
 In the final part of this project, you will add details of your user study in your `README.md`, too!
+
+## Git
+
+Additionally, you should create a Git repostiory on Github for your work.
+You may name the repository whatever you'd like, although, calling it `speedreader` probably makes the most sense!
+You should use good Git practices and periodically check in code to your repository.
+When you are done, you will upload your Github repo to Gradescope directly!
 
 ## Part 1: WordGenerator
 
@@ -132,25 +140,12 @@ Download the file here:
 
 * [DrawingPanel.java](./files/DrawingPanel.java)
 
-NetBeans does not provide a way to import a Java file directly into a project.
-The easiest way I found to do this is to:
+And include it in the same directory as your `SpeedReader.java` file.
+You will need to include the following `package` declaration at the top of the `SpeedReader` file:
 
-1.  Create a new file Java file in your project via the menu: File → New File → Java → Java Class.
-    In the resulting dialog:
-    -   Name the class `DrawingPanel`.
-    -   Ensure the package is the same as the project package: `edu.grinnell.csc207.speedreader`.
-    This will create a new file, `DrawingPanel.java`, in:
-
-    ~~~ 
-    SpeedReader/src/main/java/edu/grinnell/csc207/speedreader/DrawingPanel.java
-    ~~~
-
-2.  Open the file in NetBeans, delete the contents of the file, and copy-paste the contents of the file linked above.
-3.  Add the following package declaration statement at the top of the file to reflect the package structure:
-
-    ~~~java
-    package edu.grinnell.csc207.speedreader;
-    ~~~
+~~~java
+package edu.grinnell.csc207.speedreader;
+~~~
 
 After doing this, you will be able to use the `DrawingPanel` in either of your source files!
 
@@ -273,22 +268,9 @@ SpeedReader/
    └─ WordGenerator.java
 ~~~
 
-Please delete the `SpeedReader/target` folder before you bundle your project for submission; this folder contains compiled `.class` files that are not necessary to submit!
-You can either manually delete this directory or run `mvn clean` from the terminal in the `SpeedReader/` directory.
+You can then upload your final project to Gradescope
 
-Once the `target` folder is deleted, you should:
-
-1.  Compress the `SpeedReader/` directory into a zip file.
-    On many operating systems, you can navigate to this directory in your file explorer-equivalent, right-click the folder, and choose an option that roughly says "Compress ..." or "Create zip archive ... ."
-    Alternatively, on Mac or Linux, you can navigate to the directory that contains the `SpeedReader/` directory and use the `zip` program:
-
-    ~~~console
-    > zip SpeedReader.zip -r SpeedReader/
-    ~~~
-
-2.  Upload your `SpeedReader.zip` zip file to Gradescope!
-
-Again, make sure that your program passes the autograder tests on Gradescope.
+Make sure that your program passes the autograder tests on Gradescope.
 Some of these tests will check whether your project has the correct directory structure.
 Other tests will check the correctness of your `WordGenerator` class.
 We will manually check the overall application since it is graphics-based!

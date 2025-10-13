@@ -2,7 +2,7 @@
 
 You have certainly written tests in other programming languages, but perhaps in an ad hoc fashion.
 One of the niceties of Java is its strong support for testing through the [JUnit testing framework](https://junit.org/junit5/) for _unit testing_ and the [Jqwik library](https://jqwik.net/) for _property-based testing_.
-Not only are the libraries robust, but there is also deep integration of these frameworks into Java IDEs such as NetBeans and VSCode.
+Not only are the libraries robust, but there is also deep integration of these frameworks into Java IDEs such as VSCode.
 This makes test development, execution, and monitoring painless... dare, I say, joyful, in Java!
 
 ## Part 1: Git and Github
@@ -26,7 +26,7 @@ Once Git is setup, you can clone the repository for this lab at the following UR
 
 + <https://github.com/psosera/TestingLab>
 
-You can then open the project in NetBeans through File → Open Project and opening the Git repository folder which, conveniently, is set up to be a Maven project!
+You can then open the repository in VSCode by opening the folder containing this repository which, conveniently, is set up to be a Maven project!
 
 ## Part 2: The JUnit Testing Framework
 
@@ -149,15 +149,12 @@ These annotations can then be programmatically manipulated by language analysis 
 Within `exampleUnitTest`, we use the `assertEquals(expected, actual)` static function to demand that some `expected` value is equal to the `actual` value being produced.
 In this specific case, we assert that the third-greatest value of `arr` should be `4`.
 
-To run our tests in NetBeans, we can proceed in one of three ways:
-
-*   We can run this individual test by clicking the green play arrow in the left-hand gutter next to `exampleUnitTest`.
-*   We can run _all tests_ in the project with "Run → Test Project."
-
+To run our tests in VSCode, we can proceed by clicking the testing vial icon in the left-hand side of VSCOde.
+From the testing panel, you can see a list of the tests mined from the project and selective run all or some of the tests.
 We can also run all tests directly through Maven on the command-line with `mvn test`.
-Although, since we are already in NetBeans, we should favor using the NetBeans UI to enjoy the prettier output!
+Although, since we are already in VSCode, we should favor using the VSCode UI to enjoy the prettier output!
 
-Regardless of how you do it, run this test and observe the output below your source code in NetBeans.
+Regardless of how you do it, run this test and observe the output below your source code in VSCode.
 You should see that successful tests are highlighted in green.
 If a test fails, it is highlighted in red with a relevant error message to help you in the debugging process!
 

@@ -23,6 +23,7 @@
 - [Project 6: The Sounds of Sorting](./the-sounds-of-sorting.md)
 - [Ranges](./ranges.md)
 - [Trees](./trees.md)
+- [BSTs](./bsts.md)
 - [AVL Trees](./avl-trees.md)
 - [Project 7: Loot Generator](./loot-generator.md)
 - [Applying Integer Maps](./applying-integer-maps.md)

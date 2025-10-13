@@ -90,9 +90,9 @@ To begin, we’ll examine the simplest form of a tree to understand these basics
 Trees have an elegant recursive definition. A tree is either:
 
 *   An empty leaf or
-*   A node consisting of an element, a left sub-tree, and a right sub-tree.
+*   A node consisting of an element, a left subtree, and a right subtree.
 
-Such a tree is called a _binary tree_ because its nodes feature two children, the sub-trees rooted at that node.
+Such a tree is called a _binary tree_ because its nodes feature two children, the subtrees rooted at that node.
 We can visualize the second case as follows:
 
 ~~~
@@ -102,8 +102,8 @@ We can visualize the second case as follows:
    ...     ...
 ~~~
 
-We typically denote the left and right sub-trees `left` and `right`, respectively. 
-Note that these sub-trees are simply recursive occurrences of our tree definition—they’ll either be empty or be a tree itself.
+We typically denote the left and right subtrees `left` and `right`, respectively. 
+Note that these subtrees are simply recursive occurrences of our tree definition—they’ll either be empty or be a tree itself.
 
 As a concrete example, consider the following tree of integers:
 
@@ -130,13 +130,13 @@ The top-most element of the tree is called its _root_.
 Here the element 5 is the root.
 The root has two subtrees.
 The left subtree contains the elements 1, 2, and 3.
-The right sub-tree contains the elements, 6, 7, 9, and 11.
-We can identify any of the sub-trees by its root, e.g., the subtree rooted at 3 contains itself, 1, and 2.
+The right subtree contains the elements, 6, 7, 9, and 11.
+We can identify any of the subtrees by its root, e.g., the subtree rooted at 3 contains itself, 1, and 2.
 The subtree rooted at 7 contains itself and 6.
-As a degenerate case, the sub-tree rooted at 11 only contains itself, but it is still a tree, nevertheless.
+As a degenerate case, the subtree rooted at 11 only contains itself, but it is still a tree, nevertheless.
 
 For any two elements in the tree we can talk about the relationship induced by the tree’s structure.
-For example, 7 appears as the root of the left sub-tree rooted at 9.
+For example, 7 appears as the root of the left subtree rooted at 9.
 Therefore, we say that 7 is a _child_ of 9; conversely, 9 is the _parent_ of 7. 
 We’ll use all sorts of similar terminology to denote these parent-child relations as is appropriate for the domain, e.g., subordinate and boss for the corporate domain or subclass and superclass for the living organism domain.
 
@@ -292,6 +292,85 @@ We establish a static helper function, `sizeH`, that computes the size of a tree
 The method proceeds by case analysis on the shape of that `Node<T>`—it is either a leaf (`null`) or a node (non-`null`).
 In this manner, the helper function mirrors the pseudocode definition given above. Finally, we define the actual `size` method to simply call this helper method starting with the root of the tree.
 
+### Tree Traversals
+
+`size()` is a simple example of a _tree traversal method_.
+To compute the size of a tree, we must visit or _touch_ every element.
+With a sequence, there was only one logical way to visit its elements: left-to-right order.
+However, because a tree node has two children, we have a choice in the _order_ we perform the following operations:
+
++ "Processing" the value at the node.
++ Recursively diving into the node's left subtree.
++ Recursively diving into the node's right subtree.
+
+Observe that the _order_ we visit the elements of the tree is irrelevant in calculating the size of the tree because addition is commutative.
+But this not always the case!
+For example, imagine a method `toString` that prints the elements of the tree.
+Here, the order in which we visit the elements does matter!
+
+Consider the following sample tree:
+
+~~~
+        5
+       / \
+      /   \
+     /     \
+    2       8
+   / \     / \
+  1   3   7   9
+          |   |
+          6   10
+~~~
+
+And the following pseudocode description of `toString`:
+
+*   If the tree is a leaf, its string representation is the empty string.
+*   If the tree is a node, its string representation is the string representation of the value, followed by the string representations of the left-hand and right-hand trees, in-order.
+
+This version of `toString` first “stringifies” the value at a node before recursively descending into its subtrees.
+This results in the following output for the sample tree:
+
+~~~
+[5, 2, 1, 3, 8, 7, 6, 9, 10]
+~~~
+
+This is an example of a _pre-order traversal_ of the tree where we “visit” the value at the node first, then the left-hand subtree, and the right-hand subtree.
+
+We can exchange this order to obtain two other traversal strategies:
+
+*   _In-order traversal_: Recursively process the left-hand subtree, “visit” the value at the node, recursively process the right-hand subtree.
+*   _Post-order traversal_: Recursively process the left-hand subtree, recursively process the right-hand subtree, and “visit” the value at the node.
+
+An in-order traversal of the sample tree yields the list `[1, 2, 3, 5, 6, 7, 8, 9, 10]`.
+The post-order traversal of the sample tree yields the list `[1, 3, 2, 6, 7, 10, 9, 8, 5]`.
+
+Each traversal order has several use cases:
+
+*   An in-order traversal of a _binary search tree_, described below, yields the elements of the tree in sorted order.
+*   Pre-order traversal provides a convenient way for serializing a tree into a linear form appropriate for storage in a file that can be used to recreate the tree later.
+*   If we interpret the interior nodes of the tree as operators and the leaves as values, post-order traversal yields _postfix notation_ or _reverse polish notation (RPN)_ which does not require expressions to be parenthesized.
+    For example, the mathematical expression written in traditional infix style `3 × (4 + 5)` has the unambiguous representation in RPN: `3 4 5 + ×`.
+
+~~~admonish question title="Making a Tree (‡)"
+Using the definition of the `Tree<T>` class, write code that manually creates the tree of integers:
+
+```
+      5
+     / \
+    /   \
+   /     \
+  2       8
+ / \     / \
+1   3   7   9
+        |   |
+        6   10
+```
+
+In other words, you should write an expression consisting of `new Node(...)` calls that constructs this tree.
+Store the results of this expression as a local variable called `exampleTree`.
+To access the `Node<T>` class of `Tree<T>`, you can write a `main` method within the `Tree<T>` class that defines `exampleTree`.
+~~~
+
 ## Binary Search Trees
 
 Before we discuss other tree operations, we must narrow our domain of interest to take advantage of the hierarchical relationships that the tree offers.
@@ -313,7 +392,7 @@ We can visualize this _binary search tree invariant_ as follows:
        / \
       /   \
      /     \
- {< v}    {   ≥ v}
+ {< v}    {≥ v}
 ~~~
 
 This invariant gives us guidance as to where to place elements in the tree.
@@ -350,7 +429,7 @@ We may realize this in Java as follows:
 ~~~java
 public class BinarySearchTree<T extends Comparable<T>> {
     // Node class same as before...
-     private Node<T> root;
+    private Node<T> root;
     public BinarySearchTree() { root = null; }
 
     /** @return the updated tree after inserting h into the given tree */
@@ -376,7 +455,7 @@ This means that we must constraint the generic type `T` to be any type that impl
 
 The definition of insert follows the skeleton we established for `size` above.
 However, unlike `size`, `insert` modifies the underlying tree once it finds a leaf—a node that is `null`.
-To avoid having to write `null` checks for each of the sub-trees of a node, we employ a recursive design pattern called the _update pattern_.
+To avoid having to write `null` checks for each of the subtrees of a node, we employ a recursive design pattern called the _update pattern_.
 Our recursive method, `insertH` takes the `Node<T>` that is the root of the tree as well as the element to insert as input.
 The method also returns a value, _the updated root_, as output.
 When we insert into a leaf, the root is `null`, so the method returns a new node.
@@ -392,55 +471,8 @@ root = insertH(v, root);
 
 We have updated the root of the tree with the result of inserting `v` into the tree.
 
-### Tree Traversals
-
-Next, let’s revisit traversal of a tree. 
-`size()` is a simple example of a tree traversal method.
-However, the _order_ we visit the elements of the tree is irrelevant in calculating the size of the tree because addition is commutative.
-In contrast, imagine a method `toString` that prints the elements of the tree.
-Here, the order in which we visit the elements does matter!
-
-Consider the following sample tree:
-
-~~~
-        5
-       / \
-      /   \
-     /     \
-    2       8
-   / \     / \
-  1   3   7   9
-          |   |
-          6   10
-~~~
-
-And the following pseudocode description of `toString`:
-
-*   If the tree is a leaf, its string representation is the empty string.
-*   If the tree is a node, its string representation is the string representation of the value, followed by the string representations of the left-hand and right-hand trees, in-order.
-
-This version of `toString` first “stringifies” the value at a node before recursively descending into its subtrees.
-This results in the following output for the sample tree:
-
-~~~
-[5, 2, 1, 3, 8, 7, 6, 9, 10]
-~~~
-
-This is an example of a _pre-order traversal_ of the tree where we “visit” the value at the node first, then the left-hand sub-tree, and the right-hand sub-tree.
-
-We can exchange this order to obtain two other traversal strategies:
-
-*   _In-order traversal_: Recursively process the left-hand sub-tree, “visit” the value at the node, recursively process the right-hand sub-tree.
-*   _Post-order traversal_: Recursively process the left-hand sub-tree, recursively process the right-hand sub-tree, and “visit” the value at the node.
-
-An in-order traversal of the sample tree yields the list `[1, 2, 3, 5, 6, 7, 8, 9, 10]`.
-The post-order traversal of the sample tree yields the list `[1, 3, 2, 6, 7, 10, 9, 8, 5]`.
-Each traversal order has its use cases:
-
-*   An in-order traversal of a binary search tree yields the elements of the tree in sorted order.
-*   Pre-order traversal provides a convenient way for serializing a tree into a linear form appropriate for storage in a file that can be used to recreate the tree later.
-*   If we interpret the interior nodes of the tree as operators and the leaves as values, post-order traversal yields _postfix notation_ or _reverse polish notation (RPN)_ which does not require expressions to be parenthesized.
-    For example, the mathematical expression written in traditional infix style `3 × (4 + 5)` has the unambiguous representation in RPN: `3 4 5 + ×`.
+Other tree-updating methods, e.g., deletion can also be written this style.
+We will explore deletion in the lab corresponding to this reading!
 
 ### Complexity Analysis
 
@@ -448,7 +480,7 @@ Finally, let’s consider the complexity of the various tree operations we’ve 
 
 #### Time Complexity
 
-The various traversals, like their sequential counterparts, visit every element of the structure; they, therefore, all take $\mathcal{O}(N)$ time where $N$ is the number of elements in the tree.
+The various traversals, like their sequential counterparts, visit every element of the structure; they, therefore, all take $\mathcal{O}(N)$ time, where $N$ is the number of elements in the tree.
 
 More interesting is the cost of lookup and insertion into a binary search tree.
 In the worst case of lookup, we search one path from the root of the tree to one of its leaves.
@@ -604,10 +636,10 @@ To see this, consider the binary search tree from before:
 ~~~
 
 And consider the implementation of `sizeH`.
-Keeping in mind that we evaluate expressions left-to-right, `sizeH` descends down the left-hand side of the tree (exploring `cur.left`) and then the right-hand side of the tree (exploring `cur.right`).
+Keeping in mind that we evaluate expressions left-to-right, `sizeH` descends the left-hand side of the tree (exploring `cur.left`) and then the right-hand side of the tree (exploring `cur.right`).
 Before we explore the right-hand side of the tree, we return from all the recursive calls corresponding to exploring from the left-hand side.
 
-Dually, any given call to `sizeH` does not return until its recursive calls to its left and right sub-trees return.
+Dually, any given call to `sizeH` does not return until its recursive calls to its left and right subtrees return.
 That means that the number of recursive calls active at a given node corresponds to the _length of the path_ from the root to that node.
 For example, in the above tree, when we make the recursive call to compute the size of the tree rooted at 6, the recursive calls to 7 and 5 are pending.
 Thus, the amount of stack space used up by our recursion is proportional to the length of the longest path from root to a leave of the tree.
@@ -619,3 +651,11 @@ Thus, we expect that the space complexity of our tree operations is $\mathcal{O}
 Note that this space complexity cost is essential to the operations; it is not an artifact of our implementation choice of recursion.
 In particular, if we used iteration to implement `sizeH`, we would need an explicit stack data structure to hold pending nodes that we must visit.
 We can perform a similar analysis to discover that we will need to hold at most $\mathcal{O}(\log N)$ nodes in our stack at any given point in time, assuming that the tree is roughly balanced.
+
+~~~admonish question title="Making a Tree (‡)"
+On paper, build a binary search tree by inserting the following values into the tree in the order given:
+
++   5, 8, 1, 3, 9, 10, 2
+
+Show the evolution of the tree after each insertion.
+~~~

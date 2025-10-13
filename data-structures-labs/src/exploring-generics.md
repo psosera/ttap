@@ -78,11 +78,12 @@ Review this method's documentation to see how it uses `null`:
 *   <https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html#get(java.lang.Object)>
 
 Brainstorm a list of the potential problems that `get`'s usage of `null` can produce in our programs if we aren't careful.
+Check with a member of the course staff before continuing!
 
 ### 4.2: The Optional Class
 
 We can alleviate the problems you identified in the previous part by defining a new type that makes it explicit that a value _may_ be present.
-In effect, this type is a small data structure that either holds zero or one element!
+In effect, this type is a small "sequential" data structure that either holds zero or one element!
 
 The `Optional` class in the standard library fulfills the purpose, and for this part of the lab, we'll replicate the basic functionality of `Optional` to see how this little class works.
 

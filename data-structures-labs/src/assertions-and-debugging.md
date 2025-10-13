@@ -90,11 +90,20 @@ Remember to apply the *scientific debugging process* when fixing these methods:
 3. Review your assumptions (pre-conditions, post-conditions, and invariants) that you formed in step 1 and form a hypothesis as to which of these assumptions could have been violated, causing the bug you are witnessing.
 4. Use debugging tools to verify or refute this hypothesis.
 
-For each program, you should:
+For each method, you should:
 
 + Identify the problematic line(s) of code.
 + Describe the problem in a sentence or two.
 + Describe how you fix the problem, in particular, by modifying the identified lines of code or adding new lines.
+
+Create a project called `DebuggingExercises` that utilizes Maven as discussed in class.
+You can use the following basic template file as a starting point:
+
++ [pom.basic.xml](./files/pom.basic.xml)
+
+Make sure to rename the file to `pom.xml` and place it in the root of the `DebuggingExercises` project.
+Your source files should be found in the `edu.grinnell.csc207.debugging` package, so they should be found in the `src/main/java/edu/grinnell/csc207/debugging` directory.
+For this project, you can create a single source file, `DebugggingExercises.java`, that contains the functions below.
 
 *(Note: these programs may have more than one bug in them, so test-and-diagnose thoroughly!)*
 

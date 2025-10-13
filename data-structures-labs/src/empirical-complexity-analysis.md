@@ -45,7 +45,7 @@ particular array size (the size is controlled by the `size` and `range` local va
 
 Repeat this process for each function and the following array sizes:
 
-+   $10, 50, 100, 500, 1000, 5000, 10000, 100000$,
++   $10, 100, 1000, 10000, 100000$,
 
 Record your results in the space provided, and graph the data you collect.
 The $x$-axis of your graph should be the size of the array and the $y$-axis should be the time taken.
@@ -70,7 +70,7 @@ Assuming that the array accesses dominates the runtime of the functions, then co
 Augment the three functions so that rather than returning the mcss of the given array, they report the number of array accesses each function makes while computing the mcss.
 Use your augmented program to repeat the experiment from the first part of this lab: collect the number of array accesses required for each function for the following array sizes:
 
-$10, 50, 100, 500, 1000, 5000, 10000, 100000$.
+$10, 100, 1000, 10000, 100000$.
 
 For each function, graph the data you collected.
 The $x$-axis of your graph should be the size of the array and the $y$-axis should be the number of array accesses.
