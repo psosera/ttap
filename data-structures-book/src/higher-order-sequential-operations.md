@@ -666,6 +666,6 @@ For example:
 *   `BiFunction<T, U, R>` is the type of lambdas that take a `T` and `U` as input and produce an `R` as output.
 *   `Predicate<T>` is the type of lambdas that take a `T` as input and produce a `boolean` as output.
 *   `Supplier<T>` is the type of lambdas that take no arguments and produce a `T` as output.
-*   `Consume<T>` is the type of lambdas that take a `T` as input and produce no output.
+*   `Consumer<T>` is the type of lambdas that take a `T` as input and produce no output.
 
 The `Stream` class as well as other standard library methods that use higher-order functions use these pre-defined functional interfaces in their method signatures.
