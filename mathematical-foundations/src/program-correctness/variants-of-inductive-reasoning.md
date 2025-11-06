@@ -107,7 +107,7 @@ We proceed by induction on the structure of `l`.
     The left-hand side of the equality evaluates to:
 
     ```python
-         length(interserse(v, l))
+         length(intersperse(v, l))
     -->* length([h, v, *intersperse(v, tail)])
     -->* 2 + length(intersperse(v, tail))
     ```
