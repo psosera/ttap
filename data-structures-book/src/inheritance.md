@@ -449,6 +449,28 @@ Dog d = new Dog();        // static type: Dog, dynamic type: Dog
 
 We can use this information to determine which of the method implementations actually fire for any call to `makeNoise`.
 
+~~~admonish question title="Making Noise (‡)"
+Determine the output of each of the following calls to `makeNoise` to animals from our animal class hierarchy:
+
+```java
+Animal a1 = new Dog();
+Animal a2 = new Cat();
+Animal a3 = new Lion();
+Cat c1  = new Cat();
+Cat c2 = new Lion();
+Lion l = new Lion();
+Dog d = new Dog();
+
+a1.makeNoise();
+a2.makeNoise();
+a3.makeNoise();
+c1.makeNoise();
+c2.makeNoise();
+l.makeNoise();
+d.makeNoise();
+```
+~~~
+
 ## The Mechanics of Dynamic Dispatch
 
 Recall the rules for resolving overridden method calls:
@@ -562,6 +584,19 @@ We then look for a `baz()` entry, find such an entry, `C3.baz()`, and invoke tha
 As an exercise it's a good to consider all the possible combinations of variable assignments we can have with our subtyping relationship and invocation of methods on those variables.
 Those combinations should either result in a _type error_ at compile time or the invocation of one of the versions of these methods.
 Try writing out these various combinations and use this mental model of dynamic dispatch to predict the result.
+
+~~~admonish question title="Calling Dispatch(‡)"
+
+Consider the class hierarchy consisting of `C1`, `C2`, `C3`, and `C4` above.
+For each variable declaration and method call, determine whether the snippet typechecks.
+If it does, write down the output of the method call.
+If not, describe why the snipper does not typecheck.
+
++   `C1 c = new C4(); c.foo();`
++   `C2 c = new C3(); c.foo();`
++   `C4 c = new C3(); c.baz();`
++   `C1 c = new C4(); c.baz();`
+~~~
 
 ### The Object Class
 
@@ -875,6 +910,27 @@ Furthermore, the logic for this operation is spread out among all the subclasses
 From a programming language design perspective, this problem is known as the _expression problem_.
 It is difficult to satisfy all four of these desiderata simultaneously and different languages (in particular, _language paradigms_ such as object-oriented versus functional programming) make trade-offs in various dimensions when solving this problem.
 In Java, as long as we leverage inheritance and dynamic dispatch, we can get close, although you should be aware that the approach is still unsatisfying in the ways we have discussed.
+
+~~~admonish question title="Pipeline Refactoring (‡)"
+Consider the following method that reports the title of an `Employee` from the `Employee` class hierarchy (with `Engineer`, `Chef`, and `Ceo` subclasses):
+
+```java
+public static String getTitle(Employee e) {
+    if (employee instanceof Engineer) {
+        return "Engineer";
+    } else if (employee instanceof Chef) {
+        return "Chef";
+    } else if (employee instanceof Ceo) {
+        return "Ceo";
+    } else {
+        return "Employee";
+    }
+}
+```
+
+Write a minimal implementation of the `Employee` class hierarchy that uses inheritance and dynamic dispatch to refactor this method.
+You only need to provide enough implementation details of the various `Employee` classes to capture the implementation of `getTitle`.
+~~~
 
 ## Case Study: Exceptions
 
